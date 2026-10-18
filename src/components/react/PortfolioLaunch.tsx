@@ -5,7 +5,8 @@ import FlyingButton from './FlyingButton';
 
 type Theme = 'dark' | 'light';
 
-const rocketSrc = typeof rocket === 'string' ? rocket : rocket.src;
+const rocketFile = rocket as unknown as string | { src: string };
+const rocketSrc = typeof rocketFile === 'string' ? rocketFile : rocketFile.src;
 
 export default function PortfolioLaunch() {
 	const [theme, setTheme] = useState<Theme>('dark');
@@ -57,7 +58,7 @@ export default function PortfolioLaunch() {
 					window.open('https://www.srosthai.me', '_blank', 'noopener,noreferrer');
 				}}
 			>
-				<img className="rocket-mark" src={rocket} alt="" draggable={false} />
+				<img className="rocket-mark" src={rocketSrc} alt="" draggable={false} />
 				<span className="sr-only">Portfolio</span>
 			</FlyingButton>
 		</div>,
