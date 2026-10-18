@@ -1811,12 +1811,16 @@ function createEngine({ root, canvas, button, cursor, ramp, props }: EngineArgs)
     }
   };
 
-  root.addEventListener('pointermove', onMove);
-  root.addEventListener('pointerenter', onMove);
-  root.addEventListener('pointerleave', onLeave);
-  root.addEventListener('pointerdown', onDown);
-  root.addEventListener('pointerup', onUp);
-  root.addEventListener('pointercancel', onUp);
+  const onOut = (e: PointerEvent) => {
+    if (e.relatedTarget) return;
+    onLeave();
+  };
+
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerdown', onDown);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
+  window.addEventListener('pointerout', onOut);
   button.addEventListener('click', onClick);
 
   const ro = new ResizeObserver(measure);
@@ -1837,12 +1841,11 @@ function createEngine({ root, canvas, button, cursor, ramp, props }: EngineArgs)
       ro.disconnect();
       dropStrip();
       if (s.raf) cancelAnimationFrame(s.raf);
-      root.removeEventListener('pointermove', onMove);
-      root.removeEventListener('pointerenter', onMove);
-      root.removeEventListener('pointerleave', onLeave);
-      root.removeEventListener('pointerdown', onDown);
-      root.removeEventListener('pointerup', onUp);
-      root.removeEventListener('pointercancel', onUp);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      window.removeEventListener('pointerout', onOut);
       button.removeEventListener('click', onClick);
       if (sim) sim.dispose();
     }
@@ -2295,7 +2298,7 @@ export default function FlyingButton({
   return (
     <div
       ref={rootRef}
-      className={`group/fly relative isolate h-full min-h-[240px] w-full touch-manipulation overflow-hidden data-[carry]:cursor-none [&[data-dragging]:not([data-carry])]:cursor-grabbing ${className}`.trim()}
+      className={`group/fly relative h-full min-h-[240px] w-full touch-manipulation overflow-hidden data-[carry]:cursor-none [&[data-dragging]:not([data-carry])]:cursor-grabbing ${className}`.trim()}
       data-theme={theme}
       data-trigger={ramp ? 'click' : trigger}
       style={
