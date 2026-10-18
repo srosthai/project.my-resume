@@ -254,9 +254,73 @@ a {
 }
 
 @media (max-width: 767px) {
-	.project-gallery__stage {
-		height: min(68dvh, 520px);
-		min-height: 420px;
+	html:has(.home-portfolio),
+	html:has(.home-portfolio) body {
+		height: 100dvh;
+		overflow: hidden;
+	}
+
+	.site-shell:has(.home-portfolio) {
+		height: 100dvh;
+		max-height: 100dvh;
+		overflow: hidden;
+	}
+
+	.site-header {
+		padding: 0.45rem 1rem 0;
+	}
+
+	.site-brand {
+		gap: 0.15rem;
+	}
+
+	.site-main:has(.home-portfolio) {
+		min-height: 0;
+		padding: 0 1rem 0.25rem;
+		overflow: hidden;
+	}
+
+	.home-intro {
+		margin: 0.2rem 0 0;
+	}
+
+	.home-intro__title,
+	.shuffle-heading.home-intro__title {
+		font-size: 1.45rem;
+	}
+
+	.home-intro__meta {
+		margin-top: 0.25rem;
+	}
+
+	.home-intro > p {
+		margin-top: 0.2rem;
+		font-size: 0.88rem;
+		line-height: 1.35;
+	}
+
+	.project-gallery {
+		flex: 1;
+		min-height: 0;
+		margin-top: 0;
+	}
+
+	.project-gallery__stage,
+	.project-gallery--mobile .project-gallery__stage {
+		flex: 1;
+		height: auto;
+		min-height: 0;
+	}
+
+	.home-portfolio {
+		flex: 0 0 200px;
+		height: 200px;
+		margin-top: 0;
+	}
+
+	.home-portfolio .group\/fly {
+		min-height: 0;
+		height: 100%;
 	}
 }
 
