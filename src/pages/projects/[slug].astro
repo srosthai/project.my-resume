@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
+import CoverLightbox from '../../components/react/CoverLightbox';
 import { getProject, getProjectSlugs, projects } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -33,17 +34,7 @@ function linkIcon(label: string): 'github' | 'external' {
 		</a>
 
 		<div class="detail__hero">
-			<figure class="detail__cover-wrap">
-				<img
-					class="detail__cover"
-					src={project.cover}
-					alt={project.coverAlt}
-					width="1200"
-					height="900"
-					loading="eager"
-					decoding="async"
-				/>
-			</figure>
+			<CoverLightbox client:load src={project.cover} alt={project.coverAlt} />
 			<div class="detail__meta">
 				<p class="detail__type">
 					<Icon name="work" size={14} />
