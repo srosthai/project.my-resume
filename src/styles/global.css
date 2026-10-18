@@ -354,12 +354,114 @@ html[data-theme='light'] .detail__cover-wrap {
 	box-shadow: 0 14px 32px color-mix(in oklab, #171513 10%, transparent);
 }
 
+.detail__cover-trigger {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	cursor: zoom-in;
+}
+
 .detail__cover {
 	display: block;
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
 	object-position: center;
+}
+
+.detail__cover-hint {
+	position: absolute;
+	right: 0.85rem;
+	bottom: 0.85rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.4rem 0.7rem;
+	border-radius: 999px;
+	background: color-mix(in oklab, var(--stage) 72%, transparent);
+	border: 1px solid var(--toggle-border);
+	color: var(--ink);
+	font-size: 0.78rem;
+	font-weight: 550;
+	letter-spacing: -0.01em;
+	backdrop-filter: blur(8px);
+	opacity: 0.92;
+	transition:
+		opacity 160ms ease,
+		transform 160ms ease;
+}
+
+.detail__cover-trigger:hover .detail__cover-hint,
+.detail__cover-trigger:focus-visible .detail__cover-hint {
+	opacity: 1;
+	transform: translateY(-1px);
+}
+
+.lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 80;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: 0.75rem;
+	padding: clamp(0.85rem, 3vw, 1.5rem);
+	background: color-mix(in oklab, #050607 82%, transparent);
+	backdrop-filter: blur(10px);
+	cursor: zoom-out;
+}
+
+html[data-theme='light'] .lightbox {
+	background: color-mix(in oklab, #171513 55%, transparent);
+}
+
+.lightbox__chrome {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.lightbox__title {
+	margin: 0;
+	max-width: min(70ch, 100%);
+	color: #f4f1ea;
+	font-size: 0.9rem;
+	font-weight: 550;
+}
+
+.lightbox__close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.4rem;
+	height: 2.4rem;
+	border: 1px solid color-mix(in oklab, #f4f1ea 22%, transparent);
+	border-radius: 999px;
+	background: color-mix(in oklab, #0a0b0d 55%, transparent);
+	color: #f4f1ea;
+	cursor: pointer;
+}
+
+.lightbox__close:hover {
+	border-color: color-mix(in oklab, var(--copper) 55%, transparent);
+}
+
+.lightbox__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-height: calc(100dvh - 5.5rem);
+	margin: 0 auto;
+	object-fit: contain;
+	object-position: center;
+	cursor: default;
+	border-radius: 8px;
 }
 
 .detail__type {
