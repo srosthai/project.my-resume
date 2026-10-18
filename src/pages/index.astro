@@ -19,11 +19,11 @@ const galleryProjects = projects.map((p) => ({
 	description="Explore projects showcasing skills in web development and design."
 >
 	<section class="home-intro" aria-labelledby="work-heading">
+		<WorkHeading client:load />
 		<p class="home-intro__meta">
 			<Icon name="spark" size={14} />
 			<span>{projects.length} projects</span>
 		</p>
-		<WorkHeading client:load />
 		<p>Browse the strip to explore each project.</p>
 	</section>
 
