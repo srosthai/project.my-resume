@@ -4,7 +4,7 @@
 
 ## World
 
-Dark studio stage for a portfolio that leads with a WebGL project strip. Graphite ground, chalk type, copper for primary actions only.
+Studio stage for a portfolio that leads with a WebGL project strip. Dark default with a light-theme alternate; copper for primary actions and accents.
 
 ## Palette
 
@@ -18,7 +18,9 @@ Dark studio stage for a portfolio that leads with a WebGL project strip. Graphit
 | Copper | `#C4A574` | Primary CTA / accent line |
 | Line | ink @ 12% | Dividers |
 
-Atmosphere: soft radial lifts (cool top, warm bottom corner) — not flat black.
+Atmosphere: soft radial lifts — not flat fills. Light theme uses warm paper stage (`#F4F1EA` family) with dark ink.
+
+Theme control: pill toggle at the top-right of the header (`ThemeToggle`).
 
 ## Typography
 
@@ -28,9 +30,9 @@ Atmosphere: soft radial lifts (cool top, warm bottom corner) — not flat black.
 
 ## Layout
 
-- Index: brand header, short intro, full-width FlexCarousel stage (~560px / 70dvh), centered View details CTA bound to the active slide, brief About.
-- Detail: back link, cover + meta grid, serif body, stack chips, adjacent project links.
-- No card grids on the index. Cards are not the structure.
+- Index: brand header + theme toggle, short intro, full-width FlexCarousel stage with captions only.
+- Detail: back link, cover + meta grid, status, serif body, stack chips, live links, adjacent project links.
+- No About section and no View details button on the index.
 
 ## Motion
 
