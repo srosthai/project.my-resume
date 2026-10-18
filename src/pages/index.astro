@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import ProjectGallery from '../components/react/ProjectGallery';
 import WorkHeading from '../components/react/WorkHeading';
 import Icon from '../components/Icon.astro';
+import PortfolioLaunch from '../components/react/PortfolioLaunch';
 import { projects } from '../data/projects';
 
 const galleryProjects = projects.map((p) => ({
@@ -30,9 +31,6 @@ const galleryProjects = projects.map((p) => ({
 	<ProjectGallery client:load projects={galleryProjects} />
 
 	<div class="home-portfolio">
-		<a class="btn btn--primary" href="https://www.srosthai.me" target="_blank" rel="noreferrer">
-			<Icon name="external" size={16} />
-			<span>Portfolio</span>
-		</a>
+		<PortfolioLaunch client:load />
 	</div>
 </Layout>
