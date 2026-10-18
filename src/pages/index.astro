@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectGallery from '../components/react/ProjectGallery';
+import Icon from '../components/Icon.astro';
 import { projects } from '../data/projects';
 
 const galleryProjects = projects.map((p) => ({
@@ -17,6 +18,10 @@ const galleryProjects = projects.map((p) => ({
 	description="Explore projects showcasing skills in web development and design."
 >
 	<section class="home-intro" aria-labelledby="work-heading">
+		<p class="home-intro__meta">
+			<Icon name="spark" size={14} />
+			<span>{projects.length} projects</span>
+		</p>
 		<h1 id="work-heading">Selected work</h1>
 		<p>Browse the strip to explore each project.</p>
 	</section>
