@@ -37,6 +37,8 @@ export interface CircularCarouselProps {
   fadeColor?: string;
   innerShade?: number;
   cornerRadius?: number;
+  /** How many card-steps to include when scaling the ring. Smaller values zoom the front card. */
+  fitWindow?: number;
   captions?: boolean;
   onChange?: (index: number) => void;
   onItemClick?: (item: CircularCarouselItem, index: number) => void;
@@ -354,6 +356,7 @@ const CircularCarousel = ({
   fadeColor = '#000000',
   innerShade = 0.6,
   cornerRadius = 12,
+  fitWindow,
   captions = false,
   onChange,
   onItemClick,
@@ -365,7 +368,11 @@ const CircularCarousel = ({
   const [leaving, setLeaving] = useState<Leaving | null>(null);
   const count = list.length;
   const shape: CircularCarouselPreset = PRESETS[preset] ? preset : 'cylinder';
-  const layout = PRESETS[shape];
+  const baseLayout = PRESETS[shape];
+  const layout = useMemo(
+    () => (fitWindow && fitWindow > 0 ? { ...baseLayout, window: fitWindow } : baseLayout),
+    [baseLayout, fitWindow]
+  );
   const axis = layout.axis;
   const tiltValue = tilt ?? layout.tilt;
   const curveValue = layout.billboard ? 0 : clamp(curve ?? layout.curve, 0, 1);

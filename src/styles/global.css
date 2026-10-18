@@ -229,8 +229,8 @@ a {
 }
 
 .project-gallery--mobile .project-gallery__stage {
-	height: 560px;
-	min-height: 520px;
+	height: min(68dvh, 520px);
+	min-height: 420px;
 }
 
 .project-gallery__caption {
@@ -255,8 +255,8 @@ a {
 
 @media (max-width: 767px) {
 	.project-gallery__stage {
-		height: 560px;
-		min-height: 520px;
+		height: min(68dvh, 520px);
+		min-height: 420px;
 	}
 }
 
