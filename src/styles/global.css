@@ -344,6 +344,25 @@ a {
 .home-portfolio .group\/fly button {
 	z-index: 20;
 	pointer-events: auto;
+	width: 76px !important;
+	height: 76px !important;
+	padding: 0 !important;
+	background: transparent !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.home-portfolio .group\/fly button > span:first-child {
+	display: none;
+}
+
+.rocket-mark {
+	display: block;
+	width: 76px;
+	height: 76px;
+	object-fit: contain;
+	filter: drop-shadow(0 8px 14px color-mix(in oklab, #000 32%, transparent));
+	pointer-events: none;
 }
 
 .home-portfolio .group\/fly > svg:last-child {

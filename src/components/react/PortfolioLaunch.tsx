@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import rocket from '../../assets/rocket.png';
 import FlyingButton from './FlyingButton';
 
 type Theme = 'dark' | 'light';
@@ -40,7 +41,7 @@ export default function PortfolioLaunch() {
 				altitude={altitude}
 				hoverTime={2.4}
 				jets={2}
-				thrusters
+				thrusters={false}
 				trigger="hover"
 				carryCursor
 				smoke={1}
@@ -49,11 +50,13 @@ export default function PortfolioLaunch() {
 				ramp={false}
 				thrustColor={light ? '#4f8cff' : '#8ec5ff'}
 				smokeColor={light ? '#5c574f' : '#eef1f6'}
+				buttonColor="transparent"
 				onClick={() => {
 					window.open('https://www.srosthai.me', '_blank', 'noopener,noreferrer');
 				}}
 			>
-				Portfolio
+				<img className="rocket-mark" src={rocket} alt="" draggable={false} />
+				<span className="sr-only">Portfolio</span>
 			</FlyingButton>
 		</div>,
 		document.body
