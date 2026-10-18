@@ -5,6 +5,8 @@ import FlyingButton from './FlyingButton';
 
 type Theme = 'dark' | 'light';
 
+const rocketSrc = typeof rocket === 'string' ? rocket : rocket.src;
+
 export default function PortfolioLaunch() {
 	const [theme, setTheme] = useState<Theme>('dark');
 	const [altitude, setAltitude] = useState(170);
