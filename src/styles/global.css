@@ -312,29 +312,46 @@ a {
 		min-height: 0;
 	}
 
-	.home-portfolio {
-		flex: 0 0 200px;
-		height: 200px;
-		margin-top: 0;
-	}
-
-	.home-portfolio .group\/fly {
-		min-height: 0;
-		height: 100%;
-	}
 }
 
 .home-portfolio {
-	position: relative;
-	width: 100%;
-	flex: 0 0 auto;
-	height: clamp(220px, 30dvh, 300px);
-	margin-top: 0;
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
 }
 
 .home-portfolio .group\/fly {
-	min-height: 0;
+	position: absolute;
+	inset: 0;
+	width: 100%;
 	height: 100%;
+	min-height: 0;
+	isolation: auto;
+	pointer-events: none;
+}
+
+.home-portfolio .group\/fly canvas {
+	z-index: 0;
+}
+
+.home-portfolio .group\/fly button {
+	z-index: 20;
+	pointer-events: auto;
+}
+
+.home-portfolio .group\/fly > svg:last-child {
+	z-index: 30;
+}
+
+.site-header,
+.home-intro,
+.project-gallery {
+	position: relative;
+	z-index: 1;
+}
+
+body:has(.group\/fly[data-carry]) {
+	cursor: none;
 }
 
 @media (min-width: 768px) {
@@ -381,13 +398,6 @@ a {
 		flex: 1;
 		height: auto;
 		min-height: 0;
-	}
-}
-
-@media (max-width: 767px) {
-	.home-portfolio {
-		flex: 0 0 200px;
-		height: 200px;
 	}
 }
 
