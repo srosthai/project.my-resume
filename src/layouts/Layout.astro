@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/react/ThemeToggle';
+import SiteBrand from '../components/react/SiteBrand';
 
 interface Props {
 	title?: string;
@@ -50,10 +51,7 @@ const {
 	<body>
 		<div class="site-shell">
 			<header class="site-header">
-				<a class="site-brand" href="/">
-					<span class="site-brand__name">SROS THAI</span>
-					<span class="site-brand__role">Full Stack Developer</span>
-				</a>
+				<SiteBrand client:load />
 				<div class="site-header__end">
 					<ThemeToggle client:load />
 				</div>
