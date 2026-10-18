@@ -23,8 +23,8 @@ export default function SiteBrand() {
 				respectReducedMotion
 				maxDelay={0}
 				scrambleCharset=""
-				loop={false}
-				loopDelay={0}
+				loop
+				loopDelay={3}
 				accentColor="var(--copper)"
 			/>
 			<span className="site-brand__role">Full Stack Developer</span>
