@@ -1,11 +1,30 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import ProjectGallery from '../components/react/ProjectGallery';
+import { projects } from '../data/projects';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const galleryProjects = projects.map((p) => ({
+	slug: p.slug,
+	title: p.title,
+	subtitle: p.subtitle,
+	cover: p.cover,
+	coverAlt: p.coverAlt,
+}));
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Veha — Selected work" description="Browse selected projects in a spatial gallery.">
+	<section class="home-intro" aria-labelledby="work-heading">
+		<h1 id="work-heading">Selected work</h1>
+		<p>Browse the strip, then open a project for the written case.</p>
+	</section>
+
+	<ProjectGallery client:load projects={galleryProjects} />
+
+	<section id="about" class="home-intro" style="margin-top: 3.5rem; margin-bottom: 1rem;">
+		<h2 style="margin:0;font-size:1.35rem;letter-spacing:-0.03em;">About</h2>
+		<p>
+			Software engineer building product interfaces with care for motion, clarity, and craft. Replace
+			this blurb and the sample projects with your real story.
+		</p>
+	</section>
 </Layout>

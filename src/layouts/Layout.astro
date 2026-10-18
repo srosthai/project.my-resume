@@ -1,23 +1,54 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	current?: 'work' | 'about';
+}
+
+const {
+	title = 'Veha — Selected work',
+	description = 'Selected projects and case notes.',
+	current = 'work',
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+			rel="stylesheet"
+		/>
+		<title>{title}</title>
 	</head>
 	<body>
-		<slot />
+		<div class="site-shell">
+			<header class="site-header">
+				<a class="site-brand" href="/">
+					<span class="site-brand__name">Veha</span>
+					<span class="site-brand__role">Software engineer</span>
+				</a>
+				<nav class="site-nav" aria-label="Primary">
+					<a href="/" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
+					<a href="/#about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+				</nav>
+			</header>
+			<main class="site-main">
+				<slot />
+			</main>
+			<footer class="site-footer">
+				<p>Portfolio scaffold — sample projects are labeled as illustrative.</p>
+			</footer>
+		</div>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

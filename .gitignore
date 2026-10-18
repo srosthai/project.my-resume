@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# dual lockfile — project uses package-lock.json
+yarn.lock
+
+# local design review artifacts
+.impeccable/mocks/
