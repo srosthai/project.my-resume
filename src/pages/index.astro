@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectGallery from '../components/react/ProjectGallery';
+import WorkHeading from '../components/react/WorkHeading';
 import Icon from '../components/Icon.astro';
 import { projects } from '../data/projects';
 
@@ -22,7 +23,7 @@ const galleryProjects = projects.map((p) => ({
 			<Icon name="spark" size={14} />
 			<span>{projects.length} projects</span>
 		</p>
-		<h1 id="work-heading">Selected work</h1>
+		<WorkHeading client:load />
 		<p>Browse the strip to explore each project.</p>
 	</section>
 

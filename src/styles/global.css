@@ -106,17 +106,34 @@ a {
 	text-decoration: none;
 }
 
-.site-brand__name {
+.site-brand__name,
+.shuffle-heading.site-brand__name {
 	font-size: clamp(1.35rem, 2.8vw, 1.85rem);
 	font-weight: 650;
 	letter-spacing: -0.03em;
 	line-height: 1;
+	color: var(--ink);
 }
 
 .site-brand__role {
 	color: var(--ink-muted);
 	font-size: 0.95rem;
 	letter-spacing: -0.01em;
+}
+
+.home-intro__title,
+.shuffle-heading.home-intro__title {
+	margin: 0;
+	font-size: clamp(1.75rem, 4vw, 2.75rem);
+	font-weight: 650;
+	letter-spacing: -0.035em;
+	line-height: 1.1;
+	color: var(--ink);
+}
+
+.shuffle-heading .shuffle-char,
+.shuffle-heading .shuffle-word {
+	font: inherit;
 }
 
 .theme-toggle {
