@@ -228,6 +228,38 @@ a {
 	min-height: 420px;
 }
 
+.project-gallery--mobile .project-gallery__stage {
+	height: 500px;
+	min-height: 460px;
+}
+
+.project-gallery__caption {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.2rem;
+	margin: 0.35rem 0 0;
+	text-align: center;
+}
+
+.project-gallery__caption span:first-child {
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+
+.project-gallery__caption span:last-child {
+	color: var(--ink-muted);
+	font-size: 0.85rem;
+}
+
+@media (max-width: 767px) {
+	.project-gallery__stage {
+		height: 500px;
+		min-height: 460px;
+	}
+}
+
 .project-gallery__empty {
 	margin: 4rem 0;
 	text-align: center;
