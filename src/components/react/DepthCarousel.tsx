@@ -1,13 +1,6 @@
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  PointerEvent as ReactPointerEvent,
-  KeyboardEvent as ReactKeyboardEvent
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import gsap from 'gsap';
 
 export type DepthCarouselItem = string | { image: string; alt?: string };
