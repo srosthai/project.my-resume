@@ -1,0 +1,97 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProject, getProjectSlugs, projects } from '../../data/projects';
+
+export function getStaticPaths() {
+	return getProjectSlugs().map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const project = getProject(slug!);
+
+if (!project) {
+	return Astro.redirect('/');
+}
+
+const index = projects.findIndex((p) => p.slug === project.slug);
+const prev = projects[(index - 1 + projects.length) % projects.length];
+const next = projects[(index + 1) % projects.length];
+---
+
+<Layout
+	title={`${project.title} — Veha`}
+	description={project.summary}
+	current="work"
+>
+	<article class="detail">
+		<a class="detail__back" href="/">Back to work</a>
+
+		<div class="detail__hero">
+			<img
+				class="detail__cover"
+				src={project.cover}
+				alt={project.coverAlt}
+				width="1200"
+				height="900"
+				loading="eager"
+				decoding="async"
+			/>
+			<div class="detail__meta">
+				<h1>{project.title}</h1>
+				<p class="detail__subtitle">{project.subtitle}</p>
+				<p class="detail__summary">{project.summary}</p>
+				<dl class="detail__facts">
+					<div>
+						<dt>Role</dt>
+						<dd>{project.role}</dd>
+					</div>
+					<div>
+						<dt>Year</dt>
+						<dd>{project.year}</dd>
+					</div>
+					<div style="grid-column: 1 / -1;">
+						<dt>Stack</dt>
+						<dd>
+							<ul class="detail__stack">
+								{project.stack.map((item) => <li>{item}</li>)}
+							</ul>
+						</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+
+		<div class="detail__body">
+			{project.body.map((paragraph) => <p>{paragraph}</p>)}
+		</div>
+
+		{
+			project.links.length > 0 && (
+				<div class="detail__links">
+					{project.links.map((link) =>
+						link.href === '#' ? (
+							<span class="btn-primary" style="opacity:0.55;pointer-events:none;">
+								{link.label} (soon)
+							</span>
+						) : (
+							<a class="btn-primary" href={link.href} target="_blank" rel="noreferrer">
+								{link.label}
+							</a>
+						),
+					)}
+				</div>
+			)
+		}
+
+		{
+			project.illustrative && (
+				<p class="detail__note">Illustrative sample — replace with your real case study.</p>
+			)
+		}
+
+		<nav class="detail__links" aria-label="Adjacent projects" style="margin-top: 3rem;">
+			<a class="detail__back" href={`/projects/${prev.slug}`}>Previous: {prev.title}</a>
+			<a class="detail__back" href={`/projects/${next.slug}`}>Next: {next.title}</a>
+		</nav>
+	</article>
+</Layout>
