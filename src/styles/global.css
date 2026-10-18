@@ -122,17 +122,14 @@ a {
 .theme-toggle {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.45rem;
-	min-height: 2.4rem;
-	padding: 0.4rem 0.85rem;
+	justify-content: center;
+	width: 2.4rem;
+	height: 2.4rem;
+	padding: 0;
 	border: 1px solid var(--toggle-border);
 	border-radius: 999px;
 	background: var(--toggle-bg);
 	color: var(--ink);
-	font: inherit;
-	font-size: 0.85rem;
-	font-weight: 550;
-	letter-spacing: -0.01em;
 	cursor: pointer;
 	transition:
 		background 160ms ease,
@@ -148,10 +145,6 @@ a {
 .theme-toggle__icon {
 	display: inline-flex;
 	line-height: 0;
-}
-
-.theme-toggle__label {
-	line-height: 1;
 }
 
 .site-main {

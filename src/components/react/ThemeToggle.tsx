@@ -71,7 +71,6 @@ export default function ThemeToggle() {
 					</svg>
 				)}
 			</span>
-			<span className="theme-toggle__label">{theme === 'dark' ? 'Light' : 'Dark'}</span>
 		</button>
 	);
 }
