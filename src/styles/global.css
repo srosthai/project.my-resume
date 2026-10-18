@@ -228,6 +228,13 @@ a {
 	min-height: 420px;
 }
 
+.project-gallery__stage > * {
+	position: absolute;
+	inset: 0;
+	height: auto;
+	min-height: 0;
+}
+
 .project-gallery--mobile .project-gallery__stage {
 	height: min(68dvh, 520px);
 	min-height: 420px;
