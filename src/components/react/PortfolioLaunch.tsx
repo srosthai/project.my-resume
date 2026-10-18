@@ -14,7 +14,7 @@ export default function PortfolioLaunch() {
 			setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
 		};
 		const syncAltitude = () => {
-			setAltitude(Math.round(Math.min(Math.max(window.innerHeight * 0.46, 160), 560)));
+			setAltitude(Math.round(window.innerHeight));
 		};
 		setMounted(true);
 		syncTheme();
