@@ -16,15 +16,13 @@ if (!project) {
 const index = projects.findIndex((p) => p.slug === project.slug);
 const prev = projects[(index - 1 + projects.length) % projects.length];
 const next = projects[(index + 1) % projects.length];
+const metaDescription =
+	project.summary.length > 160 ? `${project.summary.slice(0, 157).trim()}…` : project.summary;
 ---
 
-<Layout
-	title={`${project.title} — Veha`}
-	description={project.summary}
-	current="work"
->
+<Layout title={`${project.title} — SROS THAI`} description={metaDescription}>
 	<article class="detail">
-		<a class="detail__back" href="/">Back to work</a>
+		<a class="detail__back" href="/">Back to projects</a>
 
 		<div class="detail__hero">
 			<img
@@ -49,6 +47,10 @@ const next = projects[(index + 1) % projects.length];
 						<dt>Year</dt>
 						<dd>{project.year}</dd>
 					</div>
+					<div>
+						<dt>Status</dt>
+						<dd class="detail__status" data-status={project.status}>{project.status}</dd>
+					</div>
 					<div style="grid-column: 1 / -1;">
 						<dt>Stack</dt>
 						<dd>
@@ -68,24 +70,12 @@ const next = projects[(index + 1) % projects.length];
 		{
 			project.links.length > 0 && (
 				<div class="detail__links">
-					{project.links.map((link) =>
-						link.href === '#' ? (
-							<span class="btn-primary" style="opacity:0.55;pointer-events:none;">
-								{link.label} (soon)
-							</span>
-						) : (
-							<a class="btn-primary" href={link.href} target="_blank" rel="noreferrer">
-								{link.label}
-							</a>
-						),
-					)}
+					{project.links.map((link) => (
+						<a class="btn-primary" href={link.href} target="_blank" rel="noreferrer">
+							{link.label}
+						</a>
+					))}
 				</div>
-			)
-		}
-
-		{
-			project.illustrative && (
-				<p class="detail__note">Illustrative sample — replace with your real case study.</p>
 			)
 		}
 

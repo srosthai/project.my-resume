@@ -1,21 +1,20 @@
 ---
 import '../styles/global.css';
+import ThemeToggle from '../components/react/ThemeToggle';
 
 interface Props {
 	title?: string;
 	description?: string;
-	current?: 'work' | 'about';
 }
 
 const {
-	title = 'Veha — Selected work',
-	description = 'Selected projects and case notes.',
-	current = 'work',
+	title = 'SROS THAI — Projects',
+	description = 'Explore projects showcasing skills in web development and design.',
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,6 +22,23 @@ const {
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
+		<meta name="author" content="SROS THAI" />
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.getItem('theme');
+					const theme =
+						stored === 'light' || stored === 'dark'
+							? stored
+							: window.matchMedia('(prefers-color-scheme: light)').matches
+								? 'light'
+								: 'dark';
+					document.documentElement.setAttribute('data-theme', theme);
+				} catch {
+					document.documentElement.setAttribute('data-theme', 'dark');
+				}
+			})();
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -35,20 +51,16 @@ const {
 		<div class="site-shell">
 			<header class="site-header">
 				<a class="site-brand" href="/">
-					<span class="site-brand__name">Veha</span>
-					<span class="site-brand__role">Software engineer</span>
+					<span class="site-brand__name">SROS THAI</span>
+					<span class="site-brand__role">Full Stack Developer</span>
 				</a>
-				<nav class="site-nav" aria-label="Primary">
-					<a href="/" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
-					<a href="/#about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
-				</nav>
+				<div class="site-header__end">
+					<ThemeToggle client:load />
+				</div>
 			</header>
 			<main class="site-main">
 				<slot />
 			</main>
-			<footer class="site-footer">
-				<p>Portfolio scaffold — sample projects are labeled as illustrative.</p>
-			</footer>
 		</div>
 	</body>
 </html>

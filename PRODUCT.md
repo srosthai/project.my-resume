@@ -12,35 +12,34 @@ Astro (existing) with React client islands for interactive surfaces. FlexCarouse
 
 ## Users
 
-Recruiters, hiring managers, and collaborators evaluating a software engineer’s work through a portfolio. [Inferred]
+Recruiters, hiring managers, and collaborators evaluating SROS THAI’s work through a portfolio.
 
 ## Product Purpose
 
-A personal resume/portfolio site that presents projects as a browseable gallery and opens a dedicated detail view for each project. Success means a visitor can scan work quickly, then understand a selected project in depth. [Inferred from brief]
+A personal portfolio site that presents projects as a browseable gallery and opens a dedicated detail view for each project. Success means a visitor can scan work quickly, then understand a selected project in depth.
 
 ## Positioning
 
-Project discovery is led by a liquid FlexCarousel — not a static grid — so the portfolio feels spatial and intentional before any detail page. [Inferred from brief]
+Project discovery is led by a liquid FlexCarousel — not a static grid — so the portfolio feels spatial and intentional before any detail page.
 
 ## Operating Context
 
-Visitors land on the index, scrub or click through project covers in the carousel, then open “view details” for case-study content (summary, role, stack, links). [Inferred]
+Visitors land on the index, scrub or click through project covers in the carousel, then open a project for case-study content (summary, role, stack, links). Theme can be toggled dark/light from the header.
 
 ## Capabilities and Constraints
 
-- Index: FlexCarousel listing of projects with captions; selection opens project detail.
-- Detail: per-project page with richer description and outbound links.
-- Content: sample/synthetic projects until real case studies are supplied — labeled as illustrative in PRODUCT evidence, not as fabricated client claims.
+- Index: FlexCarousel listing of projects with captions only (no About block, no View details CTA).
+- Detail: per-project page with description, status, stack, and outbound links.
+- Content source of truth: https://srosthai.me/portfolio (mirrored covers under `public/projects/`).
 - Must respect `prefers-reduced-motion` (carousel already does).
-- [Open] Owner display name, real project copy, and live URLs TBD.
 
 ## Brand Commitments
 
-None pinned beyond the FlexCarousel interaction and a clean, professional presentation. [Inferred]
+Name: SROS THAI. Role: Full Stack Developer. Voice: clear, product-focused.
 
 ## Evidence on Hand
 
-No real project assets or CV copy in the repo yet. First ship uses illustrative sample projects and Unsplash cover images; replace with owner material later.
+Project records and cover images synced from the live portfolio at http://188.166.215.167/portfolio.
 
 ## Product Principles
 

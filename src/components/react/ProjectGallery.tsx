@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import FlexCarousel, { type FlexCarouselItem } from './FlexCarousel';
 
 export interface GalleryProject {
@@ -21,13 +20,8 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 		subtitle: p.subtitle,
 	}));
 
-	const [active, setActive] = useState(0);
-	const current = projects[active] ?? projects[0];
-
-	if (!current) {
-		return (
-			<p className="text-[var(--ink-muted)] text-center py-24">No projects yet.</p>
-		);
+	if (!projects.length) {
+		return <p className="project-gallery__empty">No projects yet.</p>;
 	}
 
 	return (
@@ -57,21 +51,11 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 					autoplay={false}
 					interval={4}
 					captureWheel
-					onChange={(index) => setActive(index)}
 					onSelect={(index) => {
 						const project = projects[index];
 						if (project) window.location.assign(`/projects/${project.slug}`);
 					}}
 				/>
-			</div>
-
-			<div className="project-gallery__actions">
-				<a className="btn-primary" href={`/projects/${current.slug}`}>
-					View details
-				</a>
-				<p className="project-gallery__hint">
-					Drag, scroll, or use arrow keys. Click a cover or press Enter to open.
-				</p>
 			</div>
 		</div>
 	);

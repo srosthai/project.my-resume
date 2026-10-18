@@ -1,18 +1,42 @@
 @import "tailwindcss";
 
-:root {
+:root,
+html[data-theme='dark'] {
 	--ink: #e8e6e1;
 	--ink-muted: #9a968c;
 	--ink-faint: #6a665c;
 	--stage: #0a0b0d;
 	--stage-lift: #14161a;
+	--stage-glow-a: #1c1f26;
+	--stage-glow-b: #1a1612;
 	--copper: #c4a574;
-	--copper-deep: #9a7d4f;
+	--copper-ink: #14110c;
 	--line: color-mix(in oklab, var(--ink) 12%, transparent);
+	--toggle-bg: color-mix(in oklab, var(--ink) 8%, transparent);
+	--toggle-border: color-mix(in oklab, var(--ink) 16%, transparent);
+	color-scheme: dark;
+}
+
+html[data-theme='light'] {
+	--ink: #171513;
+	--ink-muted: #5c574f;
+	--ink-faint: #8a8478;
+	--stage: #f4f1ea;
+	--stage-lift: #ebe6dc;
+	--stage-glow-a: #fffaf2;
+	--stage-glow-b: #e7dfd0;
+	--copper: #9a7d4f;
+	--copper-ink: #fff8ef;
+	--line: color-mix(in oklab, var(--ink) 12%, transparent);
+	--toggle-bg: color-mix(in oklab, var(--ink) 6%, transparent);
+	--toggle-border: color-mix(in oklab, var(--ink) 14%, transparent);
+	color-scheme: light;
+}
+
+:root {
 	--font-display: "Familjen Grotesk", "Avenir Next", "Segoe UI", sans-serif;
 	--font-body: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
 	--measure: 62ch;
-	color-scheme: dark;
 }
 
 *,
@@ -29,13 +53,14 @@ body {
 
 body {
 	background:
-		radial-gradient(120% 80% at 50% -10%, #1c1f26 0%, transparent 55%),
-		radial-gradient(70% 50% at 100% 100%, #1a1612 0%, transparent 45%),
+		radial-gradient(120% 80% at 50% -10%, var(--stage-glow-a) 0%, transparent 55%),
+		radial-gradient(70% 50% at 100% 100%, var(--stage-glow-b) 0%, transparent 45%),
 		var(--stage);
 	color: var(--ink);
 	font-family: var(--font-display);
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
+	transition: background-color 200ms ease, color 200ms ease;
 }
 
 ::selection {
@@ -62,10 +87,16 @@ a {
 
 .site-header {
 	display: flex;
-	align-items: baseline;
+	align-items: center;
 	justify-content: space-between;
 	gap: 1.5rem;
 	padding: 1.75rem clamp(1.25rem, 4vw, 3rem) 0;
+}
+
+.site-header__end {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
 }
 
 .site-brand {
@@ -76,7 +107,7 @@ a {
 }
 
 .site-brand__name {
-	font-size: clamp(1.5rem, 3vw, 2rem);
+	font-size: clamp(1.35rem, 2.8vw, 1.85rem);
 	font-weight: 650;
 	letter-spacing: -0.03em;
 	line-height: 1;
@@ -88,21 +119,39 @@ a {
 	letter-spacing: -0.01em;
 }
 
-.site-nav {
-	display: flex;
-	gap: 1.25rem;
-	font-size: 0.9rem;
-	color: var(--ink-muted);
-}
-
-.site-nav a {
-	text-decoration: none;
-	transition: color 160ms ease;
-}
-
-.site-nav a:hover,
-.site-nav a[aria-current="page"] {
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	min-height: 2.4rem;
+	padding: 0.4rem 0.85rem;
+	border: 1px solid var(--toggle-border);
+	border-radius: 999px;
+	background: var(--toggle-bg);
 	color: var(--ink);
+	font: inherit;
+	font-size: 0.85rem;
+	font-weight: 550;
+	letter-spacing: -0.01em;
+	cursor: pointer;
+	transition:
+		background 160ms ease,
+		border-color 160ms ease,
+		color 160ms ease;
+}
+
+.theme-toggle:hover {
+	border-color: color-mix(in oklab, var(--copper) 55%, var(--toggle-border));
+	color: var(--ink);
+}
+
+.theme-toggle__icon {
+	display: inline-flex;
+	line-height: 0;
+}
+
+.theme-toggle__label {
+	line-height: 1;
 }
 
 .site-main {
@@ -138,31 +187,21 @@ a {
 .project-gallery {
 	display: flex;
 	flex-direction: column;
-	gap: 0.25rem;
+	flex: 1;
 	margin-top: 0.5rem;
 }
 
 .project-gallery__stage {
 	position: relative;
 	width: 100%;
-	height: min(560px, 70dvh);
-	min-height: 380px;
+	height: min(620px, 72dvh);
+	min-height: 420px;
 }
 
-.project-gallery__actions {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 0.75rem;
-	margin-top: 4.5rem;
-	padding-bottom: 1rem;
-}
-
-.project-gallery__hint {
-	margin: 0;
-	color: var(--ink-faint);
-	font-size: 0.8rem;
+.project-gallery__empty {
+	margin: 4rem 0;
 	text-align: center;
+	color: var(--ink-muted);
 }
 
 .btn-primary {
@@ -173,7 +212,7 @@ a {
 	padding: 0.7rem 1.4rem;
 	border-radius: 999px;
 	background: var(--copper);
-	color: #14110c;
+	color: var(--copper-ink);
 	font-weight: 600;
 	font-size: 0.95rem;
 	letter-spacing: -0.01em;
@@ -189,12 +228,6 @@ a {
 
 .btn-primary:active {
 	transform: translateY(1px);
-}
-
-.site-footer {
-	padding: 1.25rem clamp(1.25rem, 4vw, 3rem) 2rem;
-	color: var(--ink-faint);
-	font-size: 0.8rem;
 }
 
 .detail {
@@ -277,6 +310,11 @@ a {
 .detail__facts dd {
 	margin: 0.25rem 0 0;
 	font-size: 0.95rem;
+	text-transform: capitalize;
+}
+
+.detail__status[data-status='processing'] {
+	color: var(--copper);
 }
 
 .detail__body {
@@ -290,6 +328,7 @@ a {
 
 .detail__body p {
 	margin: 0 0 1.15rem;
+	white-space: pre-wrap;
 }
 
 .detail__stack {
@@ -299,6 +338,7 @@ a {
 	margin: 0.35rem 0 0;
 	padding: 0;
 	list-style: none;
+	text-transform: none;
 }
 
 .detail__stack li {
@@ -307,6 +347,7 @@ a {
 	border-radius: 999px;
 	font-size: 0.8rem;
 	color: var(--ink-muted);
+	text-transform: none;
 }
 
 .detail__links {
@@ -314,12 +355,6 @@ a {
 	flex-wrap: wrap;
 	gap: 0.75rem;
 	margin-top: 2rem;
-}
-
-.detail__note {
-	margin-top: 2.5rem;
-	color: var(--ink-faint);
-	font-size: 0.8rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
