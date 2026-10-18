@@ -322,7 +322,10 @@ a {
 }
 
 .detail__cover-wrap {
+	display: grid;
+	place-items: center;
 	margin: 0;
+	aspect-ratio: 4 / 3;
 	overflow: hidden;
 	border-radius: 10px;
 	background: var(--stage-lift);
@@ -336,9 +339,10 @@ html[data-theme='light'] .detail__cover-wrap {
 
 .detail__cover {
 	display: block;
-	aspect-ratio: 4 / 3;
 	width: 100%;
-	object-fit: cover;
+	height: 100%;
+	object-fit: contain;
+	object-position: center;
 }
 
 .detail__type {
