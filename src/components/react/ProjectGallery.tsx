@@ -77,7 +77,7 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 						intro="rise"
 						cardWidth={300}
 						aspectRatio={0.82}
-						speed={14}
+						speed={8}
 						captions={false}
 						gap={18}
 						fitWindow={1.15}
