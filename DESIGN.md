@@ -41,9 +41,10 @@ Theme control: pill toggle at the top-right of the header (`ThemeToggle`).
 
 ## Components
 
-- `ProjectGallery` (React island): FlexCarousel + View details.
-- Primary button: copper pill, dark ink label.
-- Detail facts as a definition list; stack as quiet outline chips.
+- `ProjectGallery` (React island): FlexCarousel with captions.
+- `Icon.astro`: shared stroke icons for actions and fact labels.
+- Buttons: `btn--primary` (copper), `btn--ghost` (outline, e.g. GitHub), `btn--soft` (pager), `btn-text` (back).
+- Detail facts use icon + label; outbound links get GitHub or external icons.
 
 ## Do / Don't
 

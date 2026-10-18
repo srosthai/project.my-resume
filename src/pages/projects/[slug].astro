@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
 import { getProject, getProjectSlugs, projects } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -18,41 +19,65 @@ const prev = projects[(index - 1 + projects.length) % projects.length];
 const next = projects[(index + 1) % projects.length];
 const metaDescription =
 	project.summary.length > 160 ? `${project.summary.slice(0, 157).trim()}…` : project.summary;
+
+function linkIcon(label: string): 'github' | 'external' {
+	return /github/i.test(label) ? 'github' : 'external';
+}
 ---
 
 <Layout title={`${project.title} — SROS THAI`} description={metaDescription}>
 	<article class="detail">
-		<a class="detail__back" href="/">Back to projects</a>
+		<a class="btn-text" href="/">
+			<Icon name="arrow-left" size={16} />
+			<span>Back to projects</span>
+		</a>
 
 		<div class="detail__hero">
-			<img
-				class="detail__cover"
-				src={project.cover}
-				alt={project.coverAlt}
-				width="1200"
-				height="900"
-				loading="eager"
-				decoding="async"
-			/>
+			<figure class="detail__cover-wrap">
+				<img
+					class="detail__cover"
+					src={project.cover}
+					alt={project.coverAlt}
+					width="1200"
+					height="900"
+					loading="eager"
+					decoding="async"
+				/>
+			</figure>
 			<div class="detail__meta">
+				<p class="detail__type">
+					<Icon name="work" size={14} />
+					<span>{project.subtitle}</span>
+				</p>
 				<h1>{project.title}</h1>
-				<p class="detail__subtitle">{project.subtitle}</p>
 				<p class="detail__summary">{project.summary}</p>
 				<dl class="detail__facts">
-					<div>
-						<dt>Role</dt>
+					<div class="detail__fact">
+						<dt>
+							<Icon name="briefcase" size={14} />
+							<span>Role</span>
+						</dt>
 						<dd>{project.role}</dd>
 					</div>
-					<div>
-						<dt>Year</dt>
+					<div class="detail__fact">
+						<dt>
+							<Icon name="calendar" size={14} />
+							<span>Year</span>
+						</dt>
 						<dd>{project.year}</dd>
 					</div>
-					<div>
-						<dt>Status</dt>
+					<div class="detail__fact">
+						<dt>
+							<Icon name="status" size={14} />
+							<span>Status</span>
+						</dt>
 						<dd class="detail__status" data-status={project.status}>{project.status}</dd>
 					</div>
-					<div style="grid-column: 1 / -1;">
-						<dt>Stack</dt>
+					<div class="detail__fact detail__fact--wide">
+						<dt>
+							<Icon name="layers" size={14} />
+							<span>Stack</span>
+						</dt>
 						<dd>
 							<ul class="detail__stack">
 								{project.stack.map((item) => <li>{item}</li>)}
@@ -69,19 +94,37 @@ const metaDescription =
 
 		{
 			project.links.length > 0 && (
-				<div class="detail__links">
+				<div class="detail__actions">
 					{project.links.map((link) => (
-						<a class="btn-primary" href={link.href} target="_blank" rel="noreferrer">
-							{link.label}
+						<a
+							class:list={['btn', linkIcon(link.label) === 'github' ? 'btn--ghost' : 'btn--primary']}
+							href={link.href}
+							target="_blank"
+							rel="noreferrer"
+						>
+							<Icon name={linkIcon(link.label)} size={16} />
+							<span>{link.label}</span>
 						</a>
 					))}
 				</div>
 			)
 		}
 
-		<nav class="detail__links" aria-label="Adjacent projects" style="margin-top: 3rem;">
-			<a class="detail__back" href={`/projects/${prev.slug}`}>Previous: {prev.title}</a>
-			<a class="detail__back" href={`/projects/${next.slug}`}>Next: {next.title}</a>
+		<nav class="detail__pager" aria-label="Adjacent projects">
+			<a class="btn btn--soft" href={`/projects/${prev.slug}`}>
+				<Icon name="arrow-left" size={16} />
+				<span class="detail__pager-copy">
+					<span class="detail__pager-label">Previous</span>
+					<span class="detail__pager-title">{prev.title}</span>
+				</span>
+			</a>
+			<a class="btn btn--soft detail__pager-next" href={`/projects/${next.slug}`}>
+				<span class="detail__pager-copy">
+					<span class="detail__pager-label">Next</span>
+					<span class="detail__pager-title">{next.title}</span>
+				</span>
+				<Icon name="arrow-right" size={16} />
+			</a>
 		</nav>
 	</article>
 </Layout>
