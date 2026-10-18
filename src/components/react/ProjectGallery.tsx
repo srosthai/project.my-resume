@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import DepthCarousel from './DepthCarousel';
+import { useEffect, useRef, useState } from 'react';
+import CircularCarousel from './CircularCarousel';
 import FlexCarousel, { type FlexCarouselItem } from './FlexCarousel';
 
 export interface GalleryProject {
@@ -21,9 +21,15 @@ function openProject(projects: GalleryProject[], index: number) {
 	if (project) window.location.assign(`/projects/${project.slug}`);
 }
 
+function fadeForTheme() {
+	return document.documentElement.getAttribute('data-theme') === 'light' ? '#f4f1ea' : '#000000';
+}
+
 export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 	const [mobile, setMobile] = useState<boolean | null>(null);
 	const [active, setActive] = useState(0);
+	const [fadeColor, setFadeColor] = useState('#000000');
+	const activeRef = useRef(0);
 
 	useEffect(() => {
 		const media = window.matchMedia(MOBILE_QUERY);
@@ -33,6 +39,14 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 		return () => media.removeEventListener('change', sync);
 	}, []);
 
+	useEffect(() => {
+		const sync = () => setFadeColor(fadeForTheme());
+		sync();
+		const observer = new MutationObserver(sync);
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+		return () => observer.disconnect();
+	}, []);
+
 	const flexItems: FlexCarouselItem[] = projects.map((project) => ({
 		src: project.cover,
 		alt: project.coverAlt,
@@ -40,9 +54,11 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 		subtitle: project.subtitle,
 	}));
 
-	const depthItems = projects.map((project) => ({
-		image: project.cover,
-		alt: project.title,
+	const circularItems = projects.map((project) => ({
+		src: project.cover,
+		alt: project.coverAlt,
+		title: project.title,
+		subtitle: project.subtitle,
 	}));
 
 	if (!projects.length) {
@@ -55,29 +71,39 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 		<div className={`project-gallery${mobile ? ' project-gallery--mobile' : ''}`}>
 			<div className="project-gallery__stage">
 				{mobile === null ? null : mobile ? (
-					<DepthCarousel
-						items={depthItems}
-						depth={220}
-						spread={90}
-						tilt={22}
-						tiltDirection="right"
-						perspective={1400}
-						visibleCards={4}
-						falloff={0.2}
-						blur={6}
-						autoplay={false}
-						loop
-						cardWidth={300}
-						cardHeight={380}
-						radius={18}
-						tint="#05060a"
-						duration={700}
-						ease="power3.out"
-						autoplayDelay={3200}
-						showControls
-						showIndicators
-						onChange={(index) => setActive(index)}
-						onSelect={(index) => openProject(projects, index)}
+					<CircularCarousel
+						items={circularItems}
+						preset="cylinder"
+						intro="rise"
+						cardWidth={220}
+						aspectRatio={1}
+						speed={14}
+						captions={false}
+						gap={25}
+						tilt={-5}
+						curve={1}
+						perspective={2500}
+						autoplay="drift"
+						interval={3}
+						direction="left"
+						momentum={0.6}
+						snap
+						pauseOnHover
+						focusOnClick
+						draggable
+						parallax={0.3}
+						stretch={0.5}
+						fadeColor={fadeColor}
+						depthFade={0.55}
+						innerShade={0.6}
+						cornerRadius={12}
+						onChange={(index) => {
+							activeRef.current = index;
+							setActive(index);
+						}}
+						onItemClick={(_item, index) => {
+							if (index === activeRef.current) openProject(projects, index);
+						}}
 					/>
 				) : (
 					<FlexCarousel
