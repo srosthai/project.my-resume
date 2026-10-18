@@ -30,6 +30,8 @@ export default function PortfolioLaunch() {
 
 	if (!mounted) return null;
 
+	const light = theme === 'light';
+
 	return createPortal(
 		<div className="home-portfolio">
 			<FlyingButton
@@ -45,8 +47,8 @@ export default function PortfolioLaunch() {
 				turbulence={1}
 				wobble={1}
 				ramp={false}
-				thrustColor="#8ec5ff"
-				smokeColor="#eef1f6"
+				thrustColor={light ? '#4f8cff' : '#8ec5ff'}
+				smokeColor={light ? '#5c574f' : '#eef1f6'}
 				onClick={() => {
 					window.open('https://www.srosthai.me', '_blank', 'noopener,noreferrer');
 				}}
