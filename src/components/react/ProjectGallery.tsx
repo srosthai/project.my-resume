@@ -75,11 +75,12 @@ export default function ProjectGallery({ projects }: ProjectGalleryProps) {
 						items={circularItems}
 						preset="cylinder"
 						intro="rise"
-						cardWidth={220}
-						aspectRatio={1}
+						cardWidth={300}
+						aspectRatio={0.82}
 						speed={14}
 						captions={false}
-						gap={25}
+						gap={18}
+						fitWindow={1.15}
 						tilt={-5}
 						curve={1}
 						perspective={2500}
