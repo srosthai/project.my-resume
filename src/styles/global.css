@@ -260,6 +260,12 @@ a {
 	}
 }
 
+.home-portfolio {
+	display: flex;
+	justify-content: center;
+	margin-top: 1.75rem;
+}
+
 .project-gallery__empty {
 	margin: 4rem 0;
 	text-align: center;
