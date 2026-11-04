@@ -2,6 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import ProjectGallery from '../components/react/ProjectGallery';
 import { projects } from '../data/projects';
+import {
+	DEFAULT_OG_IMAGE,
+	FALLBACK_SITE_URL,
+	HOME_DESCRIPTION,
+	HOME_TITLE,
+	homeGraph,
+} from '../lib/seo';
+
+const site = Astro.site ?? new URL(FALLBACK_SITE_URL);
+const canonical = new URL(Astro.url.pathname, site).href;
+const jsonLd = homeGraph(site, canonical, new URL(DEFAULT_OG_IMAGE, site).href, projects);
 
 const galleryProjects = projects.map((p) => ({
 	slug: p.slug,
@@ -14,8 +25,10 @@ const galleryProjects = projects.map((p) => ({
 ---
 
 <Layout
-	title="SROS THAI — Projects"
-	description="Explore projects showcasing skills in web development and design."
+	title={HOME_TITLE}
+	description={HOME_DESCRIPTION}
+	type="profile"
+	jsonLd={jsonLd}
 >
 	<section class="home-intro" aria-labelledby="work-heading">
 		<div class="home-intro__eyebrow">

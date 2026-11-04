@@ -4,22 +4,22 @@
 
 ## World
 
-Editorial project archive: a calm, responsive grid on a warm paper or graphite stage, with copper used only for actions and active filters. Clear hierarchy, generous white space, and restrained motion.
+Editorial project archive: a calm, responsive grid on AMOLED black or warm paper, with copper used only for actions and active filters. Clear hierarchy, generous white space, and restrained motion.
 
 ## Palette
 
 | Token | Value | Role |
 | --- | --- | --- |
-| Stage | `#0A0B0D` | Page ground (dark) |
-| Stage lift | `#14161A` | Cards and elevated panels |
-| Ink | `#E8E6E1` | Primary text |
-| Ink muted | `#9A968C` | Supporting text |
-| Ink faint | `#6A665C` | Labels and hints |
+| Stage | `#000000` | AMOLED page ground (dark) |
+| Stage lift | `#0B0B0B` | Cards and elevated panels |
+| Ink | `#F1EFE9` | Primary text |
+| Ink muted | `#A09C94` | Supporting text |
+| Ink faint | `#6F6B63` | Labels and hints |
 | Copper | `#C4A574` | Primary CTA / active filter / accent |
 | Success | `#86C79A` | Completed status |
 | Line | ink @ 12% | Dividers and card borders |
 
-Atmosphere: soft radial lifts, never flat fills. Light theme uses the warm paper stage (`#F4F1EA`) with dark ink and a softer card surface.
+Atmosphere: true-black stage with very soft graphite lifts, never flat gray fills. Light theme uses the warm paper stage (`#F4F1EA`) with dark ink and a softer card surface.
 
 Theme control: circular icon toggle at the top-right of the header (`ThemeToggle`).
 

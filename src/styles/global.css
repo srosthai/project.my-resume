@@ -2,13 +2,13 @@
 
 :root,
 html[data-theme='dark'] {
-	--ink: #e8e6e1;
-	--ink-muted: #9a968c;
-	--ink-faint: #6a665c;
-	--stage: #0a0b0d;
-	--stage-lift: #14161a;
-	--stage-glow-a: #1c1f26;
-	--stage-glow-b: #1a1612;
+	--ink: #f1efe9;
+	--ink-muted: #a09c94;
+	--ink-faint: #6f6b63;
+	--stage: #000000;
+	--stage-lift: #0b0b0b;
+	--stage-glow-a: #101010;
+	--stage-glow-b: #080808;
 	--copper: #c4a574;
 	--copper-ink: #14110c;
 	--success: #86c79a;
@@ -18,7 +18,7 @@ html[data-theme='dark'] {
 	--surface-hover: color-mix(in oklab, var(--stage-lift) 100%, transparent);
 	--toggle-bg: color-mix(in oklab, var(--ink) 8%, transparent);
 	--toggle-border: color-mix(in oklab, var(--ink) 16%, transparent);
-	--shadow-card: 0 18px 40px color-mix(in oklab, #000 22%, transparent);
+	--shadow-card: 0 18px 40px color-mix(in oklab, #000 70%, transparent);
 	color-scheme: dark;
 }
 

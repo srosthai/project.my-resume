@@ -66,6 +66,62 @@ test.describe('portfolio', () => {
 		await expect(page.locator('.project-card')).toHaveCount(projects.length);
 	});
 
+	test('exposes canonical, social metadata, and profile structured data', async ({ page }) => {
+		await openHome(page);
+
+		await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+			'href',
+			'https://srosthai.me/',
+		);
+		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'profile');
+		await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+			'content',
+			'SROS THAI — Full Stack Developer Portfolio',
+		);
+		await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+			'content',
+			'https://srosthai.me/og-image.jpg',
+		);
+		await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+			'content',
+			'1200',
+		);
+		await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+			'content',
+			'630',
+		);
+		await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+			'content',
+			'summary_large_image',
+		);
+
+		const schema = await page.locator('script[type="application/ld+json"]').first().textContent();
+		if (!schema) throw new Error('Missing JSON-LD');
+		const graph = (JSON.parse(schema) as { '@graph': Array<Record<string, unknown>> })['@graph'];
+		expect(graph.map((node) => node['@type'])).toEqual(
+			expect.arrayContaining(['Person', 'WebSite', 'ProfilePage']),
+		);
+	});
+
+	test('serves sitemap, robots, and the social preview image', async ({ page }) => {
+		const sitemap = await page.request.get('/sitemap.xml');
+		expect(sitemap.ok()).toBeTruthy();
+		const sitemapText = await sitemap.text();
+		expect(sitemapText).toContain('<loc>https://srosthai.me/</loc>');
+		expect(sitemapText).toContain(
+			`<loc>https://srosthai.me/projects/${projects[0].slug}/</loc>`,
+		);
+
+		const robots = await page.request.get('/robots.txt');
+		expect(robots.ok()).toBeTruthy();
+		expect(await robots.text()).toContain('Sitemap: https://srosthai.me/sitemap.xml');
+
+		const preview = await page.request.get('/og-image.jpg');
+		expect(preview.ok()).toBeTruthy();
+		expect(preview.headers()['content-type']).toContain('image/jpeg');
+		expect((await preview.body()).byteLength).toBeGreaterThan(10_000);
+	});
+
 	test('renders an image, title, summary, and equal height for every card', async ({ page }) => {
 		await openHome(page);
 
@@ -134,6 +190,23 @@ test.describe('portfolio', () => {
 			await expect(actions.nth(index)).toHaveAttribute('href', project.links[index].href);
 			await expect(actions.nth(index)).toContainText(project.links[index].label);
 		}
+
+		await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+			'href',
+			`https://srosthai.me/projects/${project.slug}/`,
+		);
+		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
+		await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+			'content',
+			new URL(project.cover, 'https://srosthai.me').href,
+		);
+
+		const schema = await page.locator('script[type="application/ld+json"]').first().textContent();
+		if (!schema) throw new Error('Missing JSON-LD');
+		const graph = (JSON.parse(schema) as { '@graph': Array<Record<string, unknown>> })['@graph'];
+		expect(graph.map((node) => node['@type'])).toEqual(
+			expect.arrayContaining(['Person', 'WebSite', 'CreativeWork', 'BreadcrumbList']),
+		);
 	});
 
 	test('links and serves the favicon assets', async ({ page }) => {

@@ -4,16 +4,51 @@ import { ClientRouter } from 'astro:transitions';
 import ThemeToggle from '../components/react/ThemeToggle';
 import SiteBrand from '../components/react/SiteBrand';
 import Icon from '../components/Icon.astro';
+import {
+	DEFAULT_OG_IMAGE,
+	DEFAULT_OG_IMAGE_ALT,
+	FALLBACK_SITE_URL,
+	HOME_DESCRIPTION,
+	HOME_TITLE,
+	PERSON_NAME,
+	type JsonLd,
+} from '../lib/seo';
 
 interface Props {
 	title?: string;
 	description?: string;
+	image?: string;
+	imageAlt?: string;
+	imageWidth?: number;
+	imageHeight?: number;
+	type?: 'website' | 'profile' | 'article';
+	jsonLd?: JsonLd[];
 }
 
 const {
-	title = 'SROS THAI — Projects',
-	description = 'Explore projects showcasing skills in web development and design.',
+	title = HOME_TITLE,
+	description = HOME_DESCRIPTION,
+	image,
+	imageAlt = DEFAULT_OG_IMAGE_ALT,
+	imageWidth,
+	imageHeight,
+	type = 'website',
+	jsonLd,
 } = Astro.props;
+
+const site = Astro.site ?? new URL(FALLBACK_SITE_URL);
+const pathname = Astro.url.pathname.endsWith('/')
+	? Astro.url.pathname
+	: `${Astro.url.pathname}/`;
+const canonical = new URL(pathname, site).href;
+const imageUrl = new URL(image ?? DEFAULT_OG_IMAGE, site).href;
+const resolvedImageWidth = image ? imageWidth : 1200;
+const resolvedImageHeight = image ? imageHeight : 630;
+const imageType = imageUrl.endsWith('.png')
+	? 'image/png'
+	: imageUrl.endsWith('.svg')
+		? 'image/svg+xml'
+		: 'image/jpeg';
 ---
 
 <!doctype html>
@@ -26,8 +61,55 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<meta name="author" content="SROS THAI" />
+		<meta
+			name="description"
+			content={description}
+		/>
+		<meta name="author" content={PERSON_NAME} />
+		<meta name="application-name" content={PERSON_NAME} />
+		<meta http-equiv="content-language" content="en" />
+		<meta
+			name="robots"
+			content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+		/>
+		<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+
+		<link rel="canonical" href={canonical} />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content={PERSON_NAME} />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={imageUrl} />
+		<meta property="og:image:type" content={imageType} />
+		<meta property="og:image:alt" content={imageAlt} />
+		{
+			resolvedImageWidth && resolvedImageHeight && (
+				<>
+					<meta property="og:image:width" content={String(resolvedImageWidth)} />
+					<meta property="og:image:height" content={String(resolvedImageHeight)} />
+				</>
+			)
+		}
+		{type === 'profile' && (
+			<>
+				<meta property="profile:first_name" content="Thai" />
+				<meta property="profile:last_name" content="Sros" />
+				<meta property="profile:username" content="srosthai" />
+			</>
+		)}
+		{type === 'article' && <meta property="article:author" content={PERSON_NAME} />}
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageUrl} />
+		<meta name="twitter:image:alt" content={imageAlt} />
+
 		<script is:inline>
 			(() => {
 				const readTheme = () => {
@@ -53,6 +135,14 @@ const {
 				});
 			})();
 		</script>
+		{
+			jsonLd && (
+				<script
+					type="application/ld+json"
+					set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': jsonLd })}
+				/>
+			)
+		}
 		<ClientRouter />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

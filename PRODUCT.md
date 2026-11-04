@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Astro 7 static site with React islands for the theme toggle and image lightbox. Astro `ClientRouter` handles page transitions; the project index is a responsive CSS grid with a client-side category filter.
+Astro 7 static site with React islands for the theme toggle and image lightbox. Astro `ClientRouter` handles page transitions; the project index is a responsive CSS grid with a client-side category filter. The dark theme is AMOLED true black, with a warm-paper light alternate.
 
 ## Users
 
@@ -32,6 +32,7 @@ Visitors land on the index, scan or filter projects by category, then open a pro
 - Detail: per-project page with a large cover, summary lead, role/year/status, parsed feature bullets, tech tags, and outbound links.
 - Content source of truth: `src/data/projects.ts`; the previous version is kept in `src/data/projects.backup.ts`. Covers live under `public/projects/`.
 - Must respect `prefers-reduced-motion` for theme transitions, page transitions, card motion, and hover effects.
+- SEO: canonical URLs, Open Graph/Twitter cards, a 1200x630 social preview, JSON-LD for the person, website, profile page, projects, and breadcrumbs, plus sitemap and robots endpoints.
 - Static output; no backend or database.
 
 ## Brand Commitments

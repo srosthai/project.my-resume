@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
 import CoverLightbox from '../../components/react/CoverLightbox';
 import { getProject, getProjectSlugs, projects } from '../../data/projects';
+import { FALLBACK_SITE_URL, projectGraph } from '../../lib/seo';
 
 export function getStaticPaths() {
 	return getProjectSlugs().map((slug) => ({ params: { slug } }));
@@ -20,6 +21,13 @@ const prev = projects[(index - 1 + projects.length) % projects.length];
 const next = projects[(index + 1) % projects.length];
 const metaDescription =
 	project.summary.length > 160 ? `${project.summary.slice(0, 157).trim()}…` : project.summary;
+const baseTitle = `${project.title} — ${project.subtitle}`;
+const seoTitle =
+	baseTitle.length <= 45 ? `${baseTitle} | SROS THAI` : `${project.title} | SROS THAI`;
+
+const site = Astro.site ?? new URL(FALLBACK_SITE_URL);
+const canonical = new URL(Astro.url.pathname, site).href;
+const jsonLd = projectGraph(site, canonical, project);
 
 type Block =
 	| { kind: 'paragraph'; text: string }
@@ -76,7 +84,14 @@ function linkIcon(label: string): 'github' | 'external' {
 }
 ---
 
-<Layout title={`${project.title} — SROS THAI`} description={metaDescription}>
+<Layout
+	title={seoTitle}
+	description={metaDescription}
+	image={project.cover}
+	imageAlt={project.coverAlt}
+	type="article"
+	jsonLd={jsonLd}
+>
 	<article class="detail">
 		<a class="back-link" href="/">
 			<Icon name="arrow-left" size={16} />

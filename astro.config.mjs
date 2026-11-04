@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: process.env.SITE_URL || 'https://srosthai.me',
   trailingSlash: 'always',
   integrations: [react()],
 
