@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import ThemeToggle from '../components/react/ThemeToggle';
 import SiteBrand from '../components/react/SiteBrand';
+import Icon from '../components/Icon.astro';
 
 interface Props {
 	title?: string;
@@ -19,27 +21,39 @@ const {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
 		<meta name="author" content="SROS THAI" />
 		<script is:inline>
 			(() => {
-				try {
-					const stored = localStorage.getItem('theme');
-					const theme =
-						stored === 'light' || stored === 'dark'
-							? stored
-							: window.matchMedia('(prefers-color-scheme: light)').matches
-								? 'light'
-								: 'dark';
-					document.documentElement.setAttribute('data-theme', theme);
-				} catch {
-					document.documentElement.setAttribute('data-theme', 'dark');
-				}
+				const readTheme = () => {
+					try {
+						const stored = localStorage.getItem('theme');
+						if (stored === 'light' || stored === 'dark') return stored;
+					} catch {
+						/* ignore */
+					}
+					return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+				};
+
+				const applyTheme = (doc = document) => {
+					doc.documentElement.setAttribute('data-theme', readTheme());
+				};
+
+				applyTheme();
+				document.addEventListener('astro:before-swap', (event) => {
+					applyTheme(event.newDocument);
+				});
+				document.addEventListener('astro:after-swap', () => {
+					applyTheme();
+				});
 			})();
 		</script>
+		<ClientRouter />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -50,9 +64,18 @@ const {
 	</head>
 	<body>
 		<div class="site-shell">
-			<header class="site-header">
-				<SiteBrand client:load />
+			<header class="site-header" transition:persist>
+				<SiteBrand />
 				<div class="site-header__end">
+					<a
+						class="site-header__link"
+						href="https://www.srosthai.me"
+						target="_blank"
+						rel="noreferrer"
+					>
+						<span>Portfolio</span>
+						<Icon name="external" size={14} />
+					</a>
 					<ThemeToggle client:load />
 				</div>
 			</header>

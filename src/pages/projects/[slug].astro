@@ -21,6 +21,56 @@ const next = projects[(index + 1) % projects.length];
 const metaDescription =
 	project.summary.length > 160 ? `${project.summary.slice(0, 157).trim()}…` : project.summary;
 
+type Block =
+	| { kind: 'paragraph'; text: string }
+	| { kind: 'bullets'; items: string[] }
+	| { kind: 'tech'; items: string[] };
+
+function parseBody(body: string[]): Block[] {
+	const blocks: Block[] = [];
+
+	for (const entry of body) {
+		let bullets: string[] | null = null;
+
+		for (const rawLine of entry.split(/\r?\n/)) {
+			const line = rawLine.trim();
+			if (!line) {
+				bullets = null;
+				continue;
+			}
+
+			if (line.startsWith('- ')) {
+				const item = line.slice(2).trim();
+				if (!item) continue;
+				if (!bullets) {
+					bullets = [];
+					blocks.push({ kind: 'bullets', items: bullets });
+				}
+				bullets.push(item);
+				continue;
+			}
+
+			bullets = null;
+
+			if (/^Tech:\s*/i.test(line)) {
+				const items = line
+					.replace(/^Tech:\s*/i, '')
+					.split(',')
+					.map((item) => item.trim())
+					.filter(Boolean);
+				if (items.length) blocks.push({ kind: 'tech', items });
+			} else {
+				blocks.push({ kind: 'paragraph', text: line });
+			}
+		}
+	}
+
+	return blocks;
+}
+
+const blocks = parseBody(project.body);
+const hasTechBlock = blocks.some((block) => block.kind === 'tech');
+
 function linkIcon(label: string): 'github' | 'external' {
 	return /github/i.test(label) ? 'github' : 'external';
 }
@@ -28,59 +78,92 @@ function linkIcon(label: string): 'github' | 'external' {
 
 <Layout title={`${project.title} — SROS THAI`} description={metaDescription}>
 	<article class="detail">
-		<a class="btn-text" href="/">
+		<a class="back-link" href="/">
 			<Icon name="arrow-left" size={16} />
 			<span>Back to projects</span>
 		</a>
 
-		<div class="detail__hero">
-			<CoverLightbox client:load src={project.cover} alt={project.coverAlt} />
-			<div class="detail__meta">
-				<p class="detail__type">
-					<Icon name="work" size={14} />
-					<span>{project.subtitle}</span>
-				</p>
-				<h1>{project.title}</h1>
-				<p class="detail__summary">{project.summary}</p>
-				<dl class="detail__facts">
-					<div class="detail__fact">
-						<dt>
-							<Icon name="briefcase" size={14} />
-							<span>Role</span>
-						</dt>
-						<dd>{project.role}</dd>
-					</div>
-					<div class="detail__fact">
-						<dt>
-							<Icon name="calendar" size={14} />
-							<span>Year</span>
-						</dt>
-						<dd>{project.year}</dd>
-					</div>
-					<div class="detail__fact">
-						<dt>
-							<Icon name="status" size={14} />
-							<span>Status</span>
-						</dt>
-						<dd class="detail__status" data-status={project.status}>{project.status}</dd>
-					</div>
-					<div class="detail__fact detail__fact--wide">
-						<dt>
-							<Icon name="layers" size={14} />
-							<span>Stack</span>
-						</dt>
-						<dd>
-							<ul class="detail__stack">
-								{project.stack.map((item) => <li>{item}</li>)}
-							</ul>
-						</dd>
-					</div>
-				</dl>
-			</div>
-		</div>
+		<header class="detail__header">
+			<p class="detail__pill">{project.subtitle}</p>
+			<h1
+				class="detail__title"
+				style={`--vt-name: project-title-${project.slug}`}
+			>
+				{project.title}
+			</h1>
+			<p class="detail__lead">{project.summary}</p>
 
-		<div class="detail__body">
-			{project.body.map((paragraph) => <p>{paragraph}</p>)}
+			<dl class="detail__facts">
+				<div class="detail__fact">
+					<dt>
+						<Icon name="briefcase" size={14} />
+						<span>Role</span>
+					</dt>
+					<dd>{project.role}</dd>
+				</div>
+				<div class="detail__fact">
+					<dt>
+						<Icon name="calendar" size={14} />
+						<span>Year</span>
+					</dt>
+					<dd>{project.year}</dd>
+				</div>
+				<div class="detail__fact">
+					<dt>
+						<Icon name="status" size={14} />
+						<span>Status</span>
+					</dt>
+					<dd class="detail__status" data-status={project.status}>{project.status}</dd>
+				</div>
+			</dl>
+		</header>
+
+		<CoverLightbox
+			client:load
+			src={project.cover}
+			alt={project.coverAlt}
+			transitionName={`project-cover-${project.slug}`}
+		/>
+
+		<div class="detail__content">
+			{
+				blocks.map((block) => {
+					if (block.kind === 'paragraph') {
+						return <p>{block.text}</p>;
+					}
+
+					if (block.kind === 'bullets') {
+						return (
+							<ul class="detail__bullets">
+								{block.items.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						);
+					}
+
+					return (
+						<ul class="detail__tags" aria-label="Tech stack">
+							{block.items.map((item) => (
+								<li>{item}</li>
+							))}
+						</ul>
+					);
+				})
+			}
+
+			{
+				!hasTechBlock && project.stack.length > 0 && (
+					<div class="detail__stack-block">
+						<h2 class="detail__section-title">Stack</h2>
+						<ul class="detail__tags" aria-label="Tech stack">
+							{project.stack.map((item) => (
+								<li>{item}</li>
+							))}
+						</ul>
+					</div>
+				)
+			}
 		</div>
 
 		{
@@ -88,7 +171,10 @@ function linkIcon(label: string): 'github' | 'external' {
 				<div class="detail__actions">
 					{project.links.map((link) => (
 						<a
-							class:list={['btn', linkIcon(link.label) === 'github' ? 'btn--ghost' : 'btn--primary']}
+							class:list={[
+								'btn',
+								linkIcon(link.label) === 'github' ? 'btn--ghost' : 'btn--primary',
+							]}
 							href={link.href}
 							target="_blank"
 							rel="noreferrer"
@@ -102,17 +188,17 @@ function linkIcon(label: string): 'github' | 'external' {
 		}
 
 		<nav class="detail__pager" aria-label="Adjacent projects">
-			<a class="btn btn--soft" href={`/projects/${prev.slug}`}>
+			<a class="pager-link" href={`/projects/${prev.slug}/`}>
 				<Icon name="arrow-left" size={16} />
-				<span class="detail__pager-copy">
-					<span class="detail__pager-label">Previous</span>
-					<span class="detail__pager-title">{prev.title}</span>
+				<span class="pager-link__copy">
+					<span class="pager-link__label">Previous</span>
+					<span class="pager-link__title">{prev.title}</span>
 				</span>
 			</a>
-			<a class="btn btn--soft detail__pager-next" href={`/projects/${next.slug}`}>
-				<span class="detail__pager-copy">
-					<span class="detail__pager-label">Next</span>
-					<span class="detail__pager-title">{next.title}</span>
+			<a class="pager-link pager-link--next" href={`/projects/${next.slug}/`}>
+				<span class="pager-link__copy">
+					<span class="pager-link__label">Next</span>
+					<span class="pager-link__title">{next.title}</span>
 				</span>
 				<Icon name="arrow-right" size={16} />
 			</a>

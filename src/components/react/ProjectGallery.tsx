@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import CircularCarousel from './CircularCarousel';
-import FlexCarousel, { type FlexCarouselItem } from './FlexCarousel';
+import { useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 export interface GalleryProject {
 	slug: string;
 	title: string;
 	subtitle: string;
+	summary: string;
 	cover: string;
 	coverAlt: string;
 }
@@ -14,132 +14,100 @@ interface ProjectGalleryProps {
 	projects: GalleryProject[];
 }
 
-const MOBILE_QUERY = '(max-width: 767px)';
-
-function openProject(projects: GalleryProject[], index: number) {
-	const project = projects[index];
-	if (project) window.location.assign(`/projects/${project.slug}`);
-}
-
-function fadeForTheme() {
-	return document.documentElement.getAttribute('data-theme') === 'light' ? '#f4f1ea' : '#000000';
-}
+const transitionName = (name: string) => ({ '--vt-name': name }) as CSSProperties;
 
 export default function ProjectGallery({ projects }: ProjectGalleryProps) {
-	const [mobile, setMobile] = useState<boolean | null>(null);
-	const [active, setActive] = useState(0);
-	const [fadeColor, setFadeColor] = useState('#000000');
-	const activeRef = useRef(0);
+	const [activeCategory, setActiveCategory] = useState('All');
+	const [hydrated, setHydrated] = useState(false);
 
 	useEffect(() => {
-		const media = window.matchMedia(MOBILE_QUERY);
-		const sync = () => setMobile(media.matches);
-		sync();
-		media.addEventListener('change', sync);
-		return () => media.removeEventListener('change', sync);
+		setHydrated(true);
 	}, []);
 
-	useEffect(() => {
-		const sync = () => setFadeColor(fadeForTheme());
-		sync();
-		const observer = new MutationObserver(sync);
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-		return () => observer.disconnect();
-	}, []);
+	const categories = useMemo(() => {
+		const unique = new Set(projects.map((project) => project.subtitle));
+		return Array.from(unique);
+	}, [projects]);
 
-	const flexItems: FlexCarouselItem[] = projects.map((project) => ({
-		src: project.cover,
-		alt: project.coverAlt,
-		title: project.title,
-		subtitle: project.subtitle,
-	}));
-
-	const circularItems = projects.map((project) => ({
-		src: project.cover,
-		alt: project.coverAlt,
-		title: project.title,
-		subtitle: project.subtitle,
-	}));
-
-	if (!projects.length) {
-		return <p className="project-gallery__empty">No projects yet.</p>;
-	}
-
-	const current = projects[active] ?? projects[0];
+	const filteredProjects = useMemo(
+		() =>
+			activeCategory === 'All'
+				? projects
+				: projects.filter((project) => project.subtitle === activeCategory),
+		[activeCategory, projects],
+	);
 
 	return (
-		<div className={`project-gallery${mobile ? ' project-gallery--mobile' : ''}`}>
-			<div className="project-gallery__stage">
-				{mobile === null ? null : mobile ? (
-					<CircularCarousel
-						items={circularItems}
-						preset="cylinder"
-						intro="rise"
-						cardWidth={300}
-						aspectRatio={0.82}
-						speed={8}
-						captions={false}
-						gap={18}
-						fitWindow={1.15}
-						tilt={-5}
-						curve={1}
-						perspective={2500}
-						autoplay="drift"
-						interval={3}
-						direction="left"
-						momentum={0.6}
-						snap
-						pauseOnHover
-						focusOnClick
-						draggable
-						parallax={0.3}
-						stretch={0.5}
-						fadeColor={fadeColor}
-						depthFade={0.55}
-						innerShade={0.6}
-						cornerRadius={12}
-						onChange={(index) => {
-							activeRef.current = index;
-							setActive(index);
-						}}
-						onItemClick={(_item, index) => {
-							if (index === activeRef.current) openProject(projects, index);
-						}}
-					/>
-				) : (
-					<FlexCarousel
-						items={flexItems}
-						preset="liquid"
-						intro="rise"
-						cardHeight={0.5}
-						gap={12}
-						squeeze={0.2}
-						focusOnClick
-						captions
-						fit="natural"
-						radius={0}
-						lensWidth={0.74}
-						lensHeight={1.18}
-						tilt={62}
-						roundness={1}
-						bend={0.34}
-						reach={0.38}
-						curl="twist"
-						dispersion={0.45}
-						liquid={0}
-						followCursor={false}
-						autoplay={false}
-						interval={4}
-						captureWheel
-						onSelect={(index) => openProject(projects, index)}
-					/>
-				)}
+		<div className="project-gallery" data-hydrated={hydrated ? '' : undefined}>
+			<div className="project-filter" role="group" aria-label="Filter projects by category">
+				<button
+					type="button"
+					className="filter-chip"
+					aria-pressed={activeCategory === 'All'}
+					onClick={() => setActiveCategory('All')}
+				>
+					<span>All</span>
+					<span className="filter-chip__count" aria-hidden="true">
+						{projects.length}
+					</span>
+				</button>
+				{categories.map((category) => {
+					const count = projects.filter((project) => project.subtitle === category).length;
+					return (
+						<button
+							key={category}
+							type="button"
+							className="filter-chip"
+							aria-pressed={activeCategory === category}
+							onClick={() => setActiveCategory(category)}
+						>
+							<span>{category}</span>
+							<span className="filter-chip__count" aria-hidden="true">
+								{count}
+							</span>
+						</button>
+					);
+				})}
 			</div>
-			{mobile && current && (
-				<p className="project-gallery__caption">
-					<span>{current.title}</span>
-					<span>{current.subtitle}</span>
-				</p>
+
+			<p className="sr-only" aria-live="polite" aria-atomic="true">
+				{filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'} shown
+			</p>
+
+			{filteredProjects.length ? (
+				<ul className="project-grid" aria-label="Projects">
+					{filteredProjects.map((project, index) => (
+						<li key={project.slug} className="project-grid__item">
+							<a className="project-card" href={`/projects/${project.slug}/`}>
+								<div className="project-card__media">
+									<img
+										className="project-card__cover"
+										src={project.cover}
+										alt={project.coverAlt}
+										width={1600}
+										height={900}
+										loading={index < 3 ? 'eager' : 'lazy'}
+										decoding="async"
+										draggable={false}
+										style={transitionName(`project-cover-${project.slug}`)}
+									/>
+								</div>
+								<div className="project-card__body">
+									<span className="project-card__pill">{project.subtitle}</span>
+									<h2
+										className="project-card__title"
+										style={transitionName(`project-title-${project.slug}`)}
+									>
+										{project.title}
+									</h2>
+									<p className="project-card__summary">{project.summary}</p>
+								</div>
+							</a>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p className="project-grid__empty">No projects in this category.</p>
 			)}
 		</div>
 	);

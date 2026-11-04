@@ -1,15 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectGallery from '../components/react/ProjectGallery';
-import WorkHeading from '../components/react/WorkHeading';
-import Icon from '../components/Icon.astro';
-import PortfolioLaunch from '../components/react/PortfolioLaunch';
 import { projects } from '../data/projects';
 
 const galleryProjects = projects.map((p) => ({
 	slug: p.slug,
 	title: p.title,
 	subtitle: p.subtitle,
+	summary: p.summary,
 	cover: p.cover,
 	coverAlt: p.coverAlt,
 }));
@@ -20,15 +18,14 @@ const galleryProjects = projects.map((p) => ({
 	description="Explore projects showcasing skills in web development and design."
 >
 	<section class="home-intro" aria-labelledby="work-heading">
-		<WorkHeading client:load />
-		<p class="home-intro__meta">
-			<Icon name="spark" size={14} />
+		<div class="home-intro__eyebrow">
+			<span>Portfolio</span>
+			<span aria-hidden="true">/</span>
 			<span>{projects.length} projects</span>
-		</p>
-		<p>Browse the strip to explore each project.</p>
+		</div>
+		<h1 id="work-heading" class="home-intro__title">Selected work</h1>
+		<p class="home-intro__lead">Browse the work to explore each project.</p>
 	</section>
 
 	<ProjectGallery client:load projects={galleryProjects} />
-
-	<PortfolioLaunch client:load />
 </Layout>

@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Astro (existing) with React client islands for interactive surfaces. FlexCarousel (WebGL via `ogl`) on the projects index. [Inferred from repo + brief; user said proceed.]
+Astro 7 static site with React islands for the theme toggle and image lightbox. Astro `ClientRouter` handles page transitions; the project index is a responsive CSS grid with a client-side category filter.
 
 ## Users
 
@@ -16,22 +16,23 @@ Recruiters, hiring managers, and collaborators evaluating SROS THAI’s work thr
 
 ## Product Purpose
 
-A personal portfolio site that presents projects as a browseable gallery and opens a dedicated detail view for each project. Success means a visitor can scan work quickly, then understand a selected project in depth.
+A personal portfolio site that presents projects as a browsable, filterable archive and opens a dedicated detail view for each project. Success means a visitor can scan work quickly, narrow it by discipline, then understand a selected project in depth.
 
 ## Positioning
 
-Project discovery is led by a liquid FlexCarousel — not a static grid — so the portfolio feels spatial and intentional before any detail page.
+Project discovery is led by a calm, readable grid with category filters and generous project imagery — not a carousel or dashboard. The archive feels editorial and intentional before any detail page.
 
 ## Operating Context
 
-Visitors land on the index, scrub or click through project covers in the carousel, then open a project for case-study content (summary, role, stack, links). Theme can be toggled dark/light from the header.
+Visitors land on the index, scan or filter projects by category, then open a project for case-study content (summary, role, status, stack, links). The theme can be toggled dark/light from the header.
 
 ## Capabilities and Constraints
 
-- Index: FlexCarousel listing of projects with captions only (no About block, no View details CTA).
-- Detail: per-project page with description, status, stack, and outbound links.
-- Content source of truth: https://srosthai.me/portfolio (mirrored covers under `public/projects/`).
-- Must respect `prefers-reduced-motion` (carousel already does).
+- Index: responsive card grid, category filter (All / Full Stack / Frontend / Backend), 16:9 covers, two-line summaries, equal card heights.
+- Detail: per-project page with a large cover, summary lead, role/year/status, parsed feature bullets, tech tags, and outbound links.
+- Content source of truth: `src/data/projects.ts`; the previous version is kept in `src/data/projects.backup.ts`. Covers live under `public/projects/`.
+- Must respect `prefers-reduced-motion` for theme transitions, page transitions, card motion, and hover effects.
+- Static output; no backend or database.
 
 ## Brand Commitments
 
@@ -43,12 +44,12 @@ Project records and cover images synced from the live portfolio at http://188.16
 
 ## Product Principles
 
-1. Browse first, read second — the carousel is the primary wayfinding.
+1. Browse and filter first — the grid and category chips are the primary wayfinding.
 2. Details earn the click — detail pages carry substance, not filler.
 3. Honest content — never invent employers, metrics, or client names as fact.
-4. Performance-aware WebGL — degrade gracefully when WebGL2 is unavailable.
-5. Keyboard and screen-reader operable carousel region.
+4. Performance-aware static delivery — no WebGL dependency for the project listing.
+5. Keyboard and screen-reader operable filters, cards, and theme control.
 
 ## Accessibility & Inclusion
 
-Carousel exposes a labeled region, live announcement of the active slide, and keyboard navigation. Detail pages use standard document structure and focusable links.
+The filter group is labeled, active filters use `aria-pressed`, and the result count is announced politely. Cards expose their title, type, and summary as one link. Detail pages use standard document structure, focusable links, and a labeled image dialog. Theme changes respect reduced-motion preferences.

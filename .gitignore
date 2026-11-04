@@ -28,3 +28,8 @@ yarn.lock
 
 # local design review artifacts
 .impeccable/mocks/
+
+# playwright
+test-results/
+playwright-report/
+blob-report/

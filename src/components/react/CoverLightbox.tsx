@@ -1,12 +1,14 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 
 interface CoverLightboxProps {
 	src: string;
 	alt: string;
+	transitionName?: string;
 }
 
-export default function CoverLightbox({ src, alt }: CoverLightboxProps) {
+export default function CoverLightbox({ src, alt, transitionName }: CoverLightboxProps) {
 	const [open, setOpen] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const closeRef = useRef<HTMLButtonElement>(null);
@@ -36,6 +38,10 @@ export default function CoverLightbox({ src, alt }: CoverLightboxProps) {
 		};
 	}, [open]);
 
+	const imageStyle = transitionName
+		? ({ '--vt-name': transitionName } as CSSProperties)
+		: undefined;
+
 	return (
 		<>
 			<figure className="detail__cover-wrap">
@@ -52,10 +58,11 @@ export default function CoverLightbox({ src, alt }: CoverLightboxProps) {
 						className="detail__cover"
 						src={src}
 						alt={alt}
-						width={1200}
+						width={1600}
 						height={900}
 						loading="eager"
 						decoding="async"
+						style={imageStyle}
 					/>
 					<span className="detail__cover-hint" aria-hidden="true">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
