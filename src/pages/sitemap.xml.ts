@@ -4,7 +4,7 @@ import { getProjectSlugs } from '../data/projects';
 export const prerender = true;
 
 export const GET: APIRoute = ({ site }) => {
-	const base = site ?? new URL('https://srosthai.me');
+	const base = site ?? new URL('https://projects.srosthai.me');
 	const paths = ['/', ...getProjectSlugs().map((slug) => `/projects/${slug}/`)];
 	const urls = paths
 		.map((path) => `  <url><loc>${new URL(path, base).href}</loc></url>`)

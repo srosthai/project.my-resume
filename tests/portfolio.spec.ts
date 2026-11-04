@@ -71,7 +71,7 @@ test.describe('portfolio', () => {
 
 		await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
 			'href',
-			'https://srosthai.me/',
+			'https://projects.srosthai.me/',
 		);
 		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'profile');
 		await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
@@ -80,7 +80,7 @@ test.describe('portfolio', () => {
 		);
 		await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
 			'content',
-			'https://srosthai.me/og-image.jpg',
+			'https://projects.srosthai.me/og-image.jpg',
 		);
 		await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
 			'content',
@@ -107,14 +107,14 @@ test.describe('portfolio', () => {
 		const sitemap = await page.request.get('/sitemap.xml');
 		expect(sitemap.ok()).toBeTruthy();
 		const sitemapText = await sitemap.text();
-		expect(sitemapText).toContain('<loc>https://srosthai.me/</loc>');
+		expect(sitemapText).toContain('<loc>https://projects.srosthai.me/</loc>');
 		expect(sitemapText).toContain(
-			`<loc>https://srosthai.me/projects/${projects[0].slug}/</loc>`,
+			`<loc>https://projects.srosthai.me/projects/${projects[0].slug}/</loc>`,
 		);
 
 		const robots = await page.request.get('/robots.txt');
 		expect(robots.ok()).toBeTruthy();
-		expect(await robots.text()).toContain('Sitemap: https://srosthai.me/sitemap.xml');
+		expect(await robots.text()).toContain('Sitemap: https://projects.srosthai.me/sitemap.xml');
 
 		const preview = await page.request.get('/og-image.jpg');
 		expect(preview.ok()).toBeTruthy();
@@ -193,12 +193,12 @@ test.describe('portfolio', () => {
 
 		await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
 			'href',
-			`https://srosthai.me/projects/${project.slug}/`,
+			`https://projects.srosthai.me/projects/${project.slug}/`,
 		);
 		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'article');
 		await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
 			'content',
-			new URL(project.cover, 'https://srosthai.me').href,
+			new URL(project.cover, 'https://projects.srosthai.me').href,
 		);
 
 		const schema = await page.locator('script[type="application/ld+json"]').first().textContent();

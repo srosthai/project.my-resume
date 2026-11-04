@@ -1,6 +1,6 @@
 import type { Project } from '../data/projects';
 
-export const FALLBACK_SITE_URL = 'https://srosthai.me';
+export const FALLBACK_SITE_URL = 'https://projects.srosthai.me';
 export const PERSON_NAME = 'SROS THAI';
 export const PERSON_EMAIL = 'mailto:srosthai00@gmail.com';
 export const HOME_TITLE = 'SROS THAI — Full Stack Developer Portfolio';
@@ -63,7 +63,7 @@ export function websiteSchema(site: URL): JsonLd {
 		'@id': websiteId(site),
 		url: absolute(site, '/'),
 		name: PERSON_NAME,
-		alternateName: ['srosthai', 'srosthai.me'],
+		alternateName: ['srosthai', 'projects.srosthai.me'],
 		description: HOME_DESCRIPTION,
 		inLanguage: 'en',
 		publisher: {
