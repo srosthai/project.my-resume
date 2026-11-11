@@ -22,6 +22,21 @@ export interface Project {
 /** Synced from https://srosthai.me/portfolio (http://188.166.215.167/portfolio). */
 export const projects: Project[] = [
 	{
+		slug: "serdesk",
+		title: "ServerDesk",
+		subtitle: "Desktop App",
+		summary: "ServerDesk is a local-first desktop app for managing Linux VPS servers over SSH. It combines server inventory, monitoring, terminals, services, and files in one workspace with no hosted account or server agent.",
+		role: "Full Stack Developer",
+		year: "2026",
+		status: "processing",
+		cover: "/projects/serdesk.webp",
+		coverAlt: "ServerDesk desktop app server inventory screen",
+		stack: ["Tauri 2", "Rust", "React 19", "TypeScript", "Vite", "Tailwind CSS 4", "SQLite", "SSH/SFTP"],
+		body: ["ServerDesk is a desktop application for managing Linux VPS servers over SSH. It runs on your computer and connects directly to the servers you control.", "- Saved SSH profiles with password or private-key authentication and explicit host-key verification", "- Live server overview with system identity, CPU load, memory, disk, and network samples", "- Multiple interactive terminal tabs per server", "- Remote file manager with verified upload, download, rename, and delete operations over SFTP", "- Systemd service discovery with verified start, stop, and restart actions", "- Laravel project detection, fixed Artisan actions, and a read-only queue and Supervisor view", "- Bounded log tails and a local, sanitized operation history", "- Local SQLite metadata with secrets kept in the operating system credential store", "- Windows, macOS, and Linux builds; no hosted account or server agent required", "Tech: Tauri 2, Rust, React 19, TypeScript, Vite, Tailwind CSS 4, SQLite, SSH/SFTP."],
+		links: [{"label": "Github", "href": "https://github.com/srosthai/ServerDesk"}, {"label": "View", "href": "https://serdesk.srosthai.me/"}],
+		sourceId: 25,
+	},
+	{
 		slug: "vendly",
 		title: "Vendly",
 		subtitle: "Full Stack",
