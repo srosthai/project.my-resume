@@ -22,6 +22,21 @@ export interface Project {
 /** Synced from https://srosthai.me/portfolio (http://188.166.215.167/portfolio). */
 export const projects: Project[] = [
 	{
+		slug: "tosder-communities",
+		title: "Tosder Communities",
+		subtitle: "Full Stack",
+		summary: "Tosder Communities is a Cambodia travel platform where travelers find places worth the detour, copy itineraries that already work, and publish their own versions with credit to the creator.",
+		role: "Full Stack Developer",
+		year: "2026",
+		status: "processing",
+		cover: "/projects/tosder-communities.png",
+		coverAlt: "Tosder Communities homepage with a Cambodia travel template",
+		stack: ["Astro", "TypeScript", "Tailwind CSS 4", "Neon Postgres", "Neon Auth", "Prisma ORM", "Leaflet"],
+		body: ["Tosder Communities is a community travel platform for Cambodia. Travelers discover places with context, start from an itinerary someone has already walked, and make a copy that is theirs to edit.", "- Destination catalog with province, season, practical tips and nearby stops", "- Travel templates that copy into a private, editable trip without changing the creator's original", "- Creator Studio for drafting itineraries, with review before public publishing", "- Usage counted only when a traveler creates and keeps a trip, with aggregate performance for creators", "- Admin area for content, templates, users, moderation, competitions and audit", "Tech: Astro, TypeScript, Tailwind CSS 4, Neon Postgres, Neon Auth, Prisma ORM, Leaflet."],
+		links: [{"label": "Github", "href": "https://github.com/srosthai/tosder-communities"}, {"label": "View", "href": "https://tosder.srosthai.me/"}],
+		sourceId: 26,
+	},
+	{
 		slug: "serdesk",
 		title: "ServerDesk",
 		subtitle: "Desktop App",
@@ -183,7 +198,7 @@ export const projects: Project[] = [
 		coverAlt: "I-Trackers project cover",
 		stack: ["Next.js 14 (App Router)", "TypeScript", "Tailwind CSS", "Auth.js (NextAuth v5) with Google OAuth & Email/Password", "Google Sheets API", "React Hooks"],
 		body: ["iTrackers helps individuals see where their money goes. Sign in and log income and expenses from your phone or desktop.", "- Dashboard with total balance, income, expenses and net profit", "- Add, edit and delete transactions with categories and notes", "- Custom categories to organise spending", "- Login with Google or email/password", "- English and Khmer languages, dark and light themes", "Tech: Next.js, TypeScript, Tailwind CSS, Auth.js, Google Sheets API as the database."],
-		links: [{"label": "Github", "href": "https://github.com/srosthai/itrackers"}, {"label": "View", "href": "https://itrackers.vercel.app/"}],
+		links: [{"label": "Github", "href": "https://github.com/srosthai/itrackers"}, {"label": "View", "href": "https://itrackers.srosthai.me/"}],
 		sourceId: 13,
 	},
 	{
@@ -198,7 +213,7 @@ export const projects: Project[] = [
 		coverAlt: "Siem Reap Café Finder project cover",
 		stack: ["Next.js App Router", "TypeScript", "Tailwind CSS v4", "static JSON data"],
 		body: ["A modern café finder for locals, students and digital nomads in Siem Reap.", "- Search and filter cafés by type (work-friendly, aircon, cozy and more)", "- Sort by Wi-Fi speed, price or trending", "- Grid, list and map views", "- Opening hours with live open/closed status", "- Dark mode and mobile-friendly design", "Tech: Next.js, React, TypeScript, Tailwind CSS v4."],
-		links: [{"label": "View", "href": "https://srcaffee.vercel.app/"}],
+		links: [{"label": "View", "href": "https://srcafe.srosthai.me/"}],
 		sourceId: 12,
 	},
 	{
@@ -258,7 +273,7 @@ export const projects: Project[] = [
 		coverAlt: "Der Tam ME project cover",
 		stack: ["Next.js", "Tailwind"],
 		body: ["A travel showcase site for people planning a trip to Cambodia.", "- Hero section introducing Cambodia's highlights", "- Destination cards for temples, beaches and jungles", "- Built with Next.js and Tailwind CSS"],
-		links: [{"label": "Github", "href": "https://github.com/Sovannthai/der-tamme"}, {"label": "View", "href": "https://der-tamme.srosthai.dev/"}],
+		links: [{"label": "Github", "href": "https://github.com/Sovannthai/der-tamme"}, {"label": "View", "href": "https://der-tamme.srosthai.me/"}],
 		sourceId: 1,
 	},
 	{
@@ -303,7 +318,7 @@ export const projects: Project[] = [
 		coverAlt: "Free-Dash project cover",
 		stack: ["HTML", "CSS", "JavaScript", "Bootstrap 5"],
 		body: ["A cloned and shared open dashboard template for anyone to use.", "- Responsive layout for desktop and mobile", "- Ready-made dashboard components for sales metrics", "Tech: HTML, CSS, JavaScript, Bootstrap 5."],
-		links: [{"label": "View", "href": "https://free-dash.vercel.app/"}],
+		links: [{"label": "View", "href": "https://dash.srosthai.me/"}],
 		sourceId: 4,
 	},
 	{
