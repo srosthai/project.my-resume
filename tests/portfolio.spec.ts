@@ -8,6 +8,9 @@ const FAVICONS = [
 	'/apple-touch-icon.png',
 ];
 
+const CATEGORY_ORDER = ['Full Stack', 'Frontend', 'Backend', 'Desktop App'];
+const PREVIEW_LIMIT = 2;
+
 function lines(projectBody: string[]): string[] {
 	return projectBody.flatMap((entry) => entry.split(/\r?\n/).map((line) => line.trim()));
 }
@@ -34,36 +37,70 @@ async function openHome(page: Page) {
 	await page.route('https://fonts.googleapis.com/**', (route) => route.abort());
 	await page.route('https://fonts.gstatic.com/**', (route) => route.abort());
 	await page.goto('/', { waitUntil: 'domcontentloaded' });
-	await page.locator('.project-gallery[data-hydrated]').waitFor({ state: 'attached', timeout: 15_000 });
+	await page.locator('.folder-gallery[data-hydrated]').waitFor({ state: 'attached', timeout: 15_000 });
 }
 
 test.describe('portfolio', () => {
-	test('loads the home page with every project card', async ({ page }) => {
+	test('loads the home page with a folder for every discipline and a complete index', async ({ page }) => {
 		await openHome(page);
 
 		await expect(page).toHaveTitle(/SROS THAI/);
 		await expect(page.getByRole('heading', { level: 1, name: 'Selected work' })).toBeVisible();
-		await expect(page.locator('.project-card')).toHaveCount(projects.length);
-	});
-
-	test('filters projects by category', async ({ page }) => {
-		await openHome(page);
 
 		const categories = [...new Set(projects.map((project) => project.subtitle))];
-		for (const category of categories) {
-			const button = page.getByRole('button', { name: category, exact: true });
-			await button.click();
-			await expect(button).toHaveAttribute('aria-pressed', 'true');
+		await expect(page.locator('.folder-group')).toHaveCount(categories.length);
 
-			const expected = projects.filter((project) => project.subtitle === category);
-			await expect(page.locator('.project-card')).toHaveCount(expected.length);
-			await expect(page.locator('.project-card__pill')).toHaveText(
-				expected.map(() => category),
-			);
+		for (const category of categories) {
+			await expect(
+				page.getByRole('button', { name: `${category} folder`, exact: true }),
+			).toBeVisible();
 		}
 
-		await page.getByRole('button', { name: 'All', exact: true }).click();
-		await expect(page.locator('.project-card')).toHaveCount(projects.length);
+		await expect(page.locator('.project-index__list a')).toHaveCount(projects.length);
+	});
+
+	test('opens one category folder at a time and links to its index group', async ({ page }) => {
+		await openHome(page);
+
+		const groups = page.locator('.folder-group');
+		const fullStack = page.getByRole('button', { name: 'Full Stack folder', exact: true });
+		const frontend = page.getByRole('button', { name: 'Frontend folder', exact: true });
+		const fullStackGroup = groups.nth(0);
+
+		await fullStack.click();
+		await expect(fullStack).toHaveAttribute('aria-expanded', 'true');
+		await expect(fullStackGroup.locator('[data-folder-item]')).toHaveCount(2);
+		await expect(fullStackGroup.locator('[data-folder-item="0"] .folder-paper__title')).toHaveText(
+			'Tosder Communities',
+		);
+		await expect(fullStackGroup.locator('[data-folder-item="1"] .folder-paper__title')).toHaveText(
+			'Vendly',
+		);
+
+		await frontend.click();
+		await expect(frontend).toHaveAttribute('aria-expanded', 'true');
+		await expect(fullStack).toHaveAttribute('aria-expanded', 'false');
+		await expect(fullStackGroup.locator('[data-folder-item="0"]')).toHaveAttribute('tabindex', '-1');
+
+		await fullStackGroup.locator('.folder-group__meta').click();
+		await expect(page).toHaveURL(/#category-full-stack$/);
+		await expect(page.locator('#category-full-stack')).toBeInViewport();
+	});
+
+	test('opens a project from a folder preview', async ({ page }) => {
+		await openHome(page);
+
+		const project = projects.find((item) => item.subtitle === 'Full Stack');
+		if (!project) throw new Error('Missing Full Stack project');
+
+		const fullStack = page.getByRole('button', { name: 'Full Stack folder', exact: true });
+		await fullStack.click();
+		await expect(fullStack).toHaveAttribute('aria-expanded', 'true');
+
+		await page.locator('.folder-group').nth(0).locator('[data-folder-item="0"]').click();
+
+		await expect(page).toHaveURL(new RegExp(`/projects/${project.slug}/?$`));
+		await expect(page.getByRole('heading', { level: 1, name: project.title })).toBeVisible();
 	});
 
 	test('exposes canonical, social metadata, and profile structured data', async ({ page }) => {
@@ -122,42 +159,75 @@ test.describe('portfolio', () => {
 		expect((await preview.body()).byteLength).toBeGreaterThan(10_000);
 	});
 
-	test('renders an image, title, summary, and equal height for every card', async ({ page }) => {
+	test('previews recent projects and lists every project in the index', async ({ page }) => {
 		await openHome(page);
 
-		const cards = page.locator('.project-card');
-		const heights: number[] = [];
+		const groups = page.locator('.folder-group');
+		const orderedCategories = [
+			...CATEGORY_ORDER.filter((category) =>
+				projects.some((project) => project.subtitle === category),
+			),
+			...new Set(
+				projects
+					.map((project) => project.subtitle)
+					.filter((category) => !CATEGORY_ORDER.includes(category)),
+			),
+		];
 
-		for (let index = 0; index < projects.length; index += 1) {
-			const project = projects[index];
-			const card = cards.nth(index);
-			const image = card.locator('img');
-			const summary = card.locator('.project-card__summary');
+		await expect(groups).toHaveCount(orderedCategories.length);
 
-			await expect(card.locator('.project-card__title')).toHaveText(project.title);
-			await expect(summary).toHaveText(project.summary);
-			await expect(image).toHaveAttribute('src', project.cover);
-			await expect(image).toHaveAttribute('alt', project.coverAlt);
-			await expect
-				.poll(() => summary.evaluate((element) => getComputedStyle(element).webkitLineClamp))
-				.toBe('2');
+		for (let groupIndex = 0; groupIndex < orderedCategories.length; groupIndex += 1) {
+			const category = orderedCategories[groupIndex];
+			const expected = projects.filter((project) => project.subtitle === category);
+			const previews = expected.slice(0, PREVIEW_LIMIT);
+			const group = groups.nth(groupIndex);
 
-			await image.scrollIntoViewIfNeeded();
-			await expect
-				.poll(() =>
-					image.evaluate((element) => {
-						const img = element as HTMLImageElement;
-						return img.complete && img.naturalWidth > 0;
-					}),
-				)
-				.toBe(true);
+			await expect(group.locator('.folder-group__count')).toHaveText(String(expected.length));
+			await expect(group.locator('[data-folder-item]')).toHaveCount(previews.length);
 
-			const box = await card.boundingBox();
-			expect(box).not.toBeNull();
-			heights.push(box!.height);
+			for (let previewIndex = 0; previewIndex < previews.length; previewIndex += 1) {
+				const preview = previews[previewIndex];
+				const item = group.locator(`[data-folder-item="${previewIndex}"]`);
+				const image = item.locator('img.folder-paper__cover');
+
+				await expect(item.locator('.folder-paper__title')).toHaveText(preview.title);
+				await expect(image).toHaveAttribute('src', preview.cover);
+				await expect(image).toHaveAttribute('alt', '');
+
+				await image.scrollIntoViewIfNeeded();
+				await expect
+					.poll(() =>
+						image.evaluate((element) => {
+							const img = element as HTMLImageElement;
+							return img.complete && img.naturalWidth > 0;
+						}),
+					)
+					.toBe(true);
+			}
 		}
 
-		expect(Math.max(...heights) - Math.min(...heights)).toBeLessThanOrEqual(1);
+		const widths: number[] = [];
+		for (const group of await groups.all()) {
+			const box = await group.locator('[data-mode="flap"]').boundingBox();
+			expect(box).not.toBeNull();
+			widths.push(box!.width);
+		}
+		expect(Math.max(...widths) - Math.min(...widths)).toBeLessThanOrEqual(1);
+
+		const rows = await page
+			.locator('.project-index__list a')
+			.evaluateAll((links) =>
+				links.map((link) => ({
+					href: link.getAttribute('href'),
+					title: link.querySelector('.project-index__title')?.textContent?.trim(),
+				})),
+			);
+
+		const expectedRows = projects
+			.map((project) => ({ href: `/projects/${project.slug}/`, title: project.title }))
+			.sort((a, b) => a.href.localeCompare(b.href));
+		expect(rows).toHaveLength(projects.length);
+		expect(rows.sort((a, b) => String(a.href).localeCompare(String(b.href)))).toEqual(expectedRows);
 	});
 
 	test('opens a project detail page with bullets, tech tags, and links', async ({ page }) => {
@@ -170,7 +240,7 @@ test.describe('portfolio', () => {
 			) ?? projects[0];
 
 		await openHome(page);
-		await page.locator(`.project-card[href="/projects/${project.slug}/"]`).click();
+		await page.locator(`.project-index__list a[href="/projects/${project.slug}/"]`).click();
 
 		await expect(page).toHaveURL(new RegExp(`/projects/${project.slug}/?$`));
 		await expect(page.getByRole('heading', { level: 1, name: project.title })).toBeVisible();
@@ -230,8 +300,12 @@ test.describe('portfolio', () => {
 		}
 	});
 
-	test('does not overflow horizontally', async ({ page }) => {
+	test('does not overflow horizontally with a folder open', async ({ page }) => {
 		await openHome(page);
+
+		const folder = page.getByRole('button', { name: 'Full Stack folder', exact: true });
+		await folder.click();
+		await expect(folder).toHaveAttribute('aria-expanded', 'true');
 
 		const overflow = await page.evaluate(
 			() => document.documentElement.scrollWidth - document.documentElement.clientWidth,
