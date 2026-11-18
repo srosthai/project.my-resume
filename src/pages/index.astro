@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProjectGallery from '../components/react/ProjectGallery';
+import FolderGallery from '../components/react/FolderGallery';
 import { projects } from '../data/projects';
 import {
 	DEFAULT_OG_IMAGE,
@@ -21,6 +21,7 @@ const galleryProjects = projects.map((p) => ({
 	summary: p.summary,
 	cover: p.cover,
 	coverAlt: p.coverAlt,
+	year: p.year,
 }));
 ---
 
@@ -37,8 +38,10 @@ const galleryProjects = projects.map((p) => ({
 			<span>{projects.length} projects</span>
 		</div>
 		<h1 id="work-heading" class="home-intro__title">Selected work</h1>
-		<p class="home-intro__lead">Browse the work to explore each project.</p>
+		<p class="home-intro__lead">
+			Open a discipline folder for a preview, or jump to the complete index below.
+		</p>
 	</section>
 
-	<ProjectGallery client:load projects={galleryProjects} />
+	<FolderGallery client:load projects={galleryProjects} />
 </Layout>

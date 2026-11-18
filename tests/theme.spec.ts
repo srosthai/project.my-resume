@@ -84,7 +84,7 @@ test.describe('theme toggle', () => {
 		await toggle.click();
 		await expect(html).toHaveAttribute('data-theme', next);
 
-		await page.locator('.project-card').first().click();
+		await page.locator('.project-index__list a').first().click();
 		await expect(page).toHaveURL(/\/projects\/[^/]+\/$/);
 		await expect(html).toHaveAttribute('data-theme', next);
 		await expect(toggle).toHaveAttribute(
